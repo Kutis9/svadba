@@ -11,6 +11,9 @@ body {
     color: #333;
     background-color: #f9f7f7;
     padding: 20px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    touch-action: manipulation; /* Zlepšenie dotykovej interakcie */
 }
 
 .container {
@@ -51,12 +54,13 @@ header p {
     background-color: #e83e8c;
     color: white;
     border: none;
-    padding: 12px 25px;
-    font-size: 1rem;
+    padding: 15px 30px; /* Zväčšené tlačidlá pre mobilné zariadenia */
+    font-size: 1.1rem;
     cursor: pointer;
     border-radius: 30px;
     transition: background-color 0.3s;
     box-shadow: 0 2px 10px rgba(232, 62, 140, 0.3);
+    -webkit-tap-highlight-color: transparent; /* Odstránenie zvýraznenia dotyku na mobilných zariadeniach */
 }
 
 #show-upload-form:hover {
@@ -80,22 +84,23 @@ header p {
 
 .form-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px; /* Zväčšené pre lepšie cielenie dotykom */
     font-weight: 500;
+    font-size: 1.05rem; /* Zväčšené písmo pre mobilné zariadenia */
 }
 
-.form-group input[type="text"],
-.form-group input[type="file"] {
+.form-group input[type="text"] {
     width: 100%;
-    padding: 10px;
+    padding: 12px; /* Zväčšené vstupy pre ľahšie ovládanie na mobilných zariadeniach */
     border: 1px solid #ddd;
     border-radius: 5px;
+    font-size: 1rem;
 }
 
 .form-group small.form-text {
     display: block;
     margin-top: 5px;
-    font-size: 0.8rem;
+    font-size: 0.85rem; /* Mierne zväčšené pre lepšiu čitateľnosť */
     color: #666;
     line-height: 1.4;
 }
@@ -104,11 +109,12 @@ header p {
     background-color: #28a745;
     color: white;
     border: none;
-    padding: 10px 20px;
-    font-size: 1rem;
+    padding: 12px 25px; /* Zväčšené tlačidlá pre mobilné zariadenia */
+    font-size: 1.1rem;
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s;
+    -webkit-tap-highlight-color: transparent;
 }
 
 #upload-button:hover {
@@ -140,6 +146,7 @@ header p {
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
     cursor: pointer;
+    background-color: #f0f0f0; /* Pozadie počas načítavania */
 }
 
 .photo-item:hover {
@@ -151,6 +158,16 @@ header p {
     height: 250px;
     object-fit: cover;
     display: block;
+    transition: opacity 0.3s ease;
+}
+
+/* Štýly pre lazy loading */
+.photo-item img.lazy-image {
+    opacity: 0;
+}
+
+.photo-item img.loaded {
+    opacity: 1;
 }
 
 .photo-info {
@@ -158,7 +175,7 @@ header p {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 10px;
+    padding: 12px; /* Zväčšené pre lepšie cielenie dotykom */
     background-color: rgba(0, 0, 0, 0.6);
     color: white;
     display: flex;
@@ -176,8 +193,67 @@ header p {
     font-style: italic;
 }
 
+/* FilePond úpravy pre lepšiu mobilnú podporu */
+.filepond--root {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.filepond--panel-root {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.filepond--drop-label {
+    color: #555;
+    font-size: 1.1rem; /* Zväčšené písmo pre mobilné zariadenia */
+}
+
+.filepond--label-action {
+    text-decoration-color: #e83e8c;
+}
+
+.filepond--file-action-button {
+    cursor: pointer;
+}
+
+/* PhotoSwipe prispôsobenia */
+.pswp__img {
+    object-fit: contain;
+}
+
+.pswp--custom-bg {
+    --pswp-bg-color: rgba(0, 0, 0, 0.85);
+}
+
+.pswp__button {
+    color: white;
+    opacity: 0.8;
+    padding: 15px; /* Zväčšené ovládacie prvky pre dotykové ovládanie */
+}
+
+.pswp__button:hover {
+    opacity: 1;
+}
+
+.pswp__caption__center {
+    text-align: center;
+    max-width: 500px;
+    font-size: 1rem;
+    padding: 15px;
+}
+
+/* Pull-to-refresh indikátor */
+.ptr--text, .ptr--icon {
+    color: #e83e8c;
+}
+
 /* Responzívny dizajn */
 @media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
     .container {
         padding: 15px;
     }
@@ -188,7 +264,7 @@ header p {
 
     #photos-container {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 15px;
+        gap: 12px;
     }
 
     .photo-item img {
@@ -196,8 +272,43 @@ header p {
     }
 
     .photo-info {
-        padding: 5px;
-        font-size: 0.8rem;
+        padding: 8px;
+        font-size: 0.85rem;
+    }
+    
+    #show-upload-form, #upload-button {
+        width: 100%; /* Na mobilných zariadeniach tlačidlá na celú šírku */
+        margin-bottom: 10px;
+    }
+    
+    .form-group label {
+        font-size: 1.1rem;
+    }
+    
+    .form-group input[type="text"] {
+        padding: 15px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Extra malé zariadenia */
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.8rem;
+    }
+    
+    #photos-container {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 8px;
+    }
+    
+    .photo-item img {
+        height: 150px;
+    }
+    
+    .photo-info {
+        padding: 6px;
+        font-size: 0.75rem;
     }
 }
 
