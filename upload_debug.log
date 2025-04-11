@@ -1,0 +1,81 @@
+===== UPLOAD REQUEST =====
+Time: 2025-04-11 12:33:32
+REQUEST: Array
+(
+    [message] => Nieco o fotke...
+    [author] => Kutisko
+)
+
+FILES: Array
+(
+    [media] => Array
+        (
+            [name] => Array
+                (
+                    [0] => Snímka obrazovky 2025-04-11 093337.png
+                    [1] => 1.jpg
+                    [2] => IMG_9546.JPG
+                )
+
+            [full_path] => Array
+                (
+                    [0] => Snímka obrazovky 2025-04-11 093337.png
+                    [1] => 1.jpg
+                    [2] => IMG_9546.JPG
+                )
+
+            [type] => Array
+                (
+                    [0] => image/png
+                    [1] => image/jpeg
+                    [2] => image/jpeg
+                )
+
+            [tmp_name] => Array
+                (
+                    [0] => C:\xampp\tmp\phpA852.tmp
+                    [1] => C:\xampp\tmp\phpA853.tmp
+                    [2] => C:\xampp\tmp\phpA854.tmp
+                )
+
+            [error] => Array
+                (
+                    [0] => 0
+                    [1] => 0
+                    [2] => 0
+                )
+
+            [size] => Array
+                (
+                    [0] => 25050
+                    [1] => 44891
+                    [2] => 4421123
+                )
+
+        )
+
+)
+
+Processing file: Snímka obrazovky 2025-04-11 093337.png, size: 25050, tmp: C:\xampp\tmp\phpA852.tmp, error: 0
+Trying to move file to: uploads/svadba_67f8effc3921f8.06438461.png
+File moved successfully
+Metadata saved to: uploads/svadba_67f8effc3921f8.06438461.txt
+Processing file: 1.jpg, size: 44891, tmp: C:\xampp\tmp\phpA853.tmp, error: 0
+Trying to move file to: uploads/svadba_67f8effc39f692.20191568.jpg
+File moved successfully
+Metadata saved to: uploads/svadba_67f8effc39f692.20191568.txt
+Processing file: IMG_9546.JPG, size: 4421123, tmp: C:\xampp\tmp\phpA854.tmp, error: 0
+Trying to move file to: uploads/svadba_67f8effc3abbd3.47769579.jpg
+File moved successfully
+Metadata saved to: uploads/svadba_67f8effc3abbd3.47769579.txt
+Errors: Array
+(
+)
+
+Uploaded files: Array
+(
+    [0] => uploads/svadba_67f8effc3921f8.06438461.png
+    [1] => uploads/svadba_67f8effc39f692.20191568.jpg
+    [2] => uploads/svadba_67f8effc3abbd3.47769579.jpg
+)
+

@@ -1,0 +1,8 @@
+# Nastavenie práv pre súbory na 644
+find . -type f -exec chmod 644 {} \;
+
+# Nastavenie práv pre priečinky na 755
+find . -type d -exec chmod 755 {} \;
+
+# Nastavenie práv pre uploads priečinok na 777
+chmod 777 uploads
