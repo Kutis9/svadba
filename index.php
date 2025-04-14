@@ -76,6 +76,8 @@ $cacheBusting = time();
             <p>Ďakujeme, že ste s nami oslávili náš výnimočný deň. Zdieľajte s nami svoje zábery a zážitky!</p>
         </header>
 
+        <div id="status-message" class="alert" style="display: none;"></div>
+        
         <?php
         if (isset($_GET['success'])) {
             $count = intval($_GET['success']);
@@ -166,7 +168,7 @@ $cacheBusting = time();
         </section>
         
         <footer>
-            <p>&copy; <?php echo date('Y'); ?> Naša svadba. Všetky práva vyhradené.</p>
+            <p>&copy; <?php echo date('Y'); ?> Svadba Mišky a Lukáša. Ďakujeme.</p>
         </footer>
     </div>
     
@@ -267,11 +269,108 @@ $cacheBusting = time();
         
         if (uploadForm) {
             uploadForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
                 const fileInput = document.getElementById('media');
                 if (fileInput && fileInput.files.length === 0) {
-                    e.preventDefault();
-                    alert('Prosím, vyberte aspoň jeden súbor na nahratie.');
+                    showStatusMessage('Prosím, vyberte aspoň jeden súbor na nahratie.', 'error');
+                    return;
                 }
+                
+                // Zobraziť stav nahrávania
+                showStatusMessage('Nahrávanie súborov... Prosím, počkajte.', 'info');
+                
+                // Použitie FormData pre AJAX nahrávanie
+                const formData = new FormData(uploadForm);
+                
+                // AJAX požiadavka na nahratie súborov
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', uploadForm.getAttribute('action'), true);
+                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            
+                            if (response.success) {
+                                // Úspešné nahratie
+                                showStatusMessage(response.message, 'success');
+                                
+                                // Skryť formulár pre nahrávanie
+                                const formContainer = document.getElementById('upload-form-container');
+                                if (formContainer) {
+                                    formContainer.style.display = 'none';
+                                    const showFormButton = document.getElementById('show-upload-form');
+                                    if (showFormButton) {
+                                        showFormButton.textContent = 'Pridaj';
+                                    }
+                                }
+                                
+                                // Vymazať formulár
+                                uploadForm.reset();
+                                if (selectedFilesContainer) {
+                                    selectedFilesContainer.innerHTML = '';
+                                }
+                                
+                                // Obnoviť stránku po 2 sekundách pre zobrazenie nových súborov
+                                setTimeout(function() {
+                                    location.reload();
+                                }, 2000);
+                            } else {
+                                // Chyba pri nahrávaní
+                                if (response.errors && response.errors.length) {
+                                    showStatusMessage(response.errors.join('<br>'), 'error');
+                                } else {
+                                    showStatusMessage('Nastala chyba pri nahrávaní súborov.', 'error');
+                                }
+                            }
+                        } catch (e) {
+                            showStatusMessage('Nastala chyba pri spracovaní odpovede zo servera.', 'error');
+                            console.error('Error parsing response:', e);
+                        }
+                    } else {
+                        showStatusMessage('Nastala chyba pri komunikácii so serverom.', 'error');
+                    }
+                };
+                
+                xhr.onerror = function() {
+                    showStatusMessage('Nastala chyba pri komunikácii so serverom.', 'error');
+                };
+                
+                xhr.send(formData);
+            });
+        }
+    }
+    
+    /**
+     * Zobrazenie stavovej správy
+     */
+    function showStatusMessage(message, type) {
+        const statusMessage = document.getElementById('status-message');
+        if (statusMessage) {
+            statusMessage.innerHTML = message;
+            statusMessage.className = 'alert';
+            statusMessage.classList.add('alert-' + type);
+            statusMessage.style.display = 'block';
+            statusMessage.style.opacity = '1';
+            
+            // Automatické skrytie správy po 5 sekundách
+            if (type !== 'info') {
+                setTimeout(function() {
+                    statusMessage.style.opacity = '0';
+                    statusMessage.style.transition = 'opacity 0.5s';
+                    
+                    setTimeout(function() {
+                        statusMessage.style.display = 'none';
+                    }, 500);
+                }, 5000);
+            }
+            
+            // Prejsť na začiatok stránky aby bola správa viditeľná
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
         }
     }
@@ -373,4 +472,4 @@ $cacheBusting = time();
     }
     </script>
 </body>
-</html> 
+</html>

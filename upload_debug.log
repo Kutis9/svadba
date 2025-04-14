@@ -1,9 +1,9 @@
 ===== UPLOAD REQUEST =====
-Time: 2025-04-11 12:33:32
+Time: 2025-04-14 13:39:40
 REQUEST: Array
 (
-    [message] => Nieco o fotke...
-    [author] => Kutisko
+    [message] => 
+    [author] => 
 )
 
 FILES: Array
@@ -12,30 +12,34 @@ FILES: Array
         (
             [name] => Array
                 (
-                    [0] => Snímka obrazovky 2025-04-11 093337.png
-                    [1] => 1.jpg
-                    [2] => IMG_9546.JPG
+                    [0] => Designer.jpeg
+                    [1] => Designer-removebg-preview.png
+                    [2] => Formular.png
+                    [3] => pozadieSvadba.png
                 )
 
             [full_path] => Array
                 (
-                    [0] => Snímka obrazovky 2025-04-11 093337.png
-                    [1] => 1.jpg
-                    [2] => IMG_9546.JPG
+                    [0] => Designer.jpeg
+                    [1] => Designer-removebg-preview.png
+                    [2] => Formular.png
+                    [3] => pozadieSvadba.png
                 )
 
             [type] => Array
                 (
-                    [0] => image/png
-                    [1] => image/jpeg
-                    [2] => image/jpeg
+                    [0] => image/jpeg
+                    [1] => image/png
+                    [2] => image/png
+                    [3] => image/png
                 )
 
             [tmp_name] => Array
                 (
-                    [0] => C:\xampp\tmp\phpA852.tmp
-                    [1] => C:\xampp\tmp\phpA853.tmp
-                    [2] => C:\xampp\tmp\phpA854.tmp
+                    [0] => C:\xampp\tmp\php5006.tmp
+                    [1] => C:\xampp\tmp\php5007.tmp
+                    [2] => C:\xampp\tmp\php5008.tmp
+                    [3] => C:\xampp\tmp\php5019.tmp
                 )
 
             [error] => Array
@@ -43,39 +47,42 @@ FILES: Array
                     [0] => 0
                     [1] => 0
                     [2] => 0
+                    [3] => 0
                 )
 
             [size] => Array
                 (
-                    [0] => 25050
-                    [1] => 44891
-                    [2] => 4421123
+                    [0] => 101188
+                    [1] => 147797
+                    [2] => 476811
+                    [3] => 1822970
                 )
 
         )
 
 )
 
-Processing file: Snímka obrazovky 2025-04-11 093337.png, size: 25050, tmp: C:\xampp\tmp\phpA852.tmp, error: 0
-Trying to move file to: uploads/svadba_67f8effc3921f8.06438461.png
+Processing file: Designer.jpeg, size: 101188, tmp: C:\xampp\tmp\php5006.tmp, error: 0
+Trying to move file to: uploads/svadba_67fcf3fcd0d121.45365744.jpeg
 File moved successfully
-Metadata saved to: uploads/svadba_67f8effc3921f8.06438461.txt
-Processing file: 1.jpg, size: 44891, tmp: C:\xampp\tmp\phpA853.tmp, error: 0
-Trying to move file to: uploads/svadba_67f8effc39f692.20191568.jpg
+Processing file: Designer-removebg-preview.png, size: 147797, tmp: C:\xampp\tmp\php5007.tmp, error: 0
+Trying to move file to: uploads/svadba_67fcf3fcd13d06.89559187.png
 File moved successfully
-Metadata saved to: uploads/svadba_67f8effc39f692.20191568.txt
-Processing file: IMG_9546.JPG, size: 4421123, tmp: C:\xampp\tmp\phpA854.tmp, error: 0
-Trying to move file to: uploads/svadba_67f8effc3abbd3.47769579.jpg
+Processing file: Formular.png, size: 476811, tmp: C:\xampp\tmp\php5008.tmp, error: 0
+Trying to move file to: uploads/svadba_67fcf3fcd1b066.41959197.png
 File moved successfully
-Metadata saved to: uploads/svadba_67f8effc3abbd3.47769579.txt
+Processing file: pozadieSvadba.png, size: 1822970, tmp: C:\xampp\tmp\php5019.tmp, error: 0
+Trying to move file to: uploads/svadba_67fcf3fcd224c7.93594459.png
+File moved successfully
 Errors: Array
 (
 )
 
 Uploaded files: Array
 (
-    [0] => uploads/svadba_67f8effc3921f8.06438461.png
-    [1] => uploads/svadba_67f8effc39f692.20191568.jpg
-    [2] => uploads/svadba_67f8effc3abbd3.47769579.jpg
+    [0] => uploads/svadba_67fcf3fcd0d121.45365744.jpeg
+    [1] => uploads/svadba_67fcf3fcd13d06.89559187.png
+    [2] => uploads/svadba_67fcf3fcd1b066.41959197.png
+    [3] => uploads/svadba_67fcf3fcd224c7.93594459.png
 )
 

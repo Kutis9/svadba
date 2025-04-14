@@ -68,7 +68,7 @@ body {
 }
 
 .logo img {
-    width: 100%;
+    width: 150%;
     height: auto;
 }
 
@@ -307,6 +307,7 @@ header p {
     margin-bottom: 20px;
     border-radius: var(--border-radius);
     text-align: center;
+    transition: opacity 0.5s; /* Pridané pre plynulý prechod */
 }
 
 .alert-success {
@@ -319,6 +320,22 @@ header p {
     background-color: rgba(168, 87, 81, 0.2); /* Jemný tehlový odtieň */
     color: #72403b;
     border: 1px solid rgba(168, 87, 81, 0.3);
+}
+
+.alert-info {
+    background-color: rgba(70, 100, 150, 0.2); /* Jemný modrý odtieň */
+    color: #2c4c6b;
+    border: 1px solid rgba(70, 100, 150, 0.3);
+}
+
+/* Výraznejší zelený ribbon pre oznámenie o úspešnom nahratí */
+#status-message.alert-success {
+    background-color: rgba(90, 120, 82, 0.3); /* Výraznejší olivový odtieň */
+    color: #2a3c2c;
+    border: 1px solid rgba(90, 120, 82, 0.5);
+    box-shadow: 0 2px 10px rgba(90, 120, 82, 0.2);
+    font-weight: 500;
+    padding: 18px;
 }
 
 /* Vlastné štýly pre formulár uploadu */
@@ -511,4 +528,4 @@ footer {
 /* Oprava pre spinner - pridáme novú triedu pre rodičovský element */
 .gallery-item a.loaded-container::before {
     display: none !important;
-} 
+}

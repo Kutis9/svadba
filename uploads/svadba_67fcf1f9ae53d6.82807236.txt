@@ -1,0 +1,6 @@
+{
+    "Autor": "nIECO",
+    "Správa": "Kutis",
+    "Dátum nahratia": "2025-04-14 13:31:05",
+    "Pôvodný názov": "qrcodesvadba.png"
+}

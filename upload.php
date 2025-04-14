@@ -12,9 +12,16 @@ file_put_contents('upload_debug.log', "===== UPLOAD REQUEST =====" . PHP_EOL .
 
 // Kontrola metódy požiadavky
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo "<h1>Metóda nie je povolená</h1>";
-    echo "<p>Späť na <a href='index.php'>hlavnú stránku</a></p>";
-    exit;
+    // Pre AJAX odpovede
+    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'error' => 'Metóda nie je povolená']);
+        exit;
+    } else {
+        echo "<h1>Metóda nie je povolená</h1>";
+        echo "<p>Späť na <a href='index.php'>hlavnú stránku</a></p>";
+        exit;
+    }
 }
 
 // Kontrola adresára pre nahrávanie
@@ -22,10 +29,18 @@ $uploadDir = 'uploads/';
 if (!file_exists($uploadDir)) {
     if (!mkdir($uploadDir, 0777, true)) {
         file_put_contents('upload_debug.log', "Failed to create directory: $uploadDir" . PHP_EOL, FILE_APPEND);
-        echo "<h1>Chyba</h1>";
-        echo "<p>Nepodarilo sa vytvoriť adresár pre nahrávanie</p>";
-        echo "<p>Späť na <a href='index.php'>hlavnú stránku</a></p>";
-        exit;
+        
+        // Pre AJAX odpovede
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'error' => 'Nepodarilo sa vytvoriť adresár pre nahrávanie']);
+            exit;
+        } else {
+            echo "<h1>Chyba</h1>";
+            echo "<p>Nepodarilo sa vytvoriť adresár pre nahrávanie</p>";
+            echo "<p>Späť na <a href='index.php'>hlavnú stránku</a></p>";
+            exit;
+        }
     }
 }
 
@@ -124,90 +139,27 @@ if (isset($_FILES['media']) && !empty($_FILES['media']['name'][0])) {
 file_put_contents('upload_debug.log', "Errors: " . print_r($errors, true) . PHP_EOL, FILE_APPEND);
 file_put_contents('upload_debug.log', "Uploaded files: " . print_r($uploadedFiles, true) . PHP_EOL, FILE_APPEND);
 
-// Zobrazenie výsledku priamo na stránke namiesto presmerovania
-?>
-<!DOCTYPE html>
-<html lang="sk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Výsledok nahrávania</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1 {
-            color: #e83e8c;
-        }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        .back {
-            margin-top: 20px;
-        }
-        .debug {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 30px;
-            white-space: pre-wrap;
-            font-family: monospace;
-            font-size: 12px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Výsledok nahrávania</h1>
-
-    <?php if (empty($errors)): ?>
-        <div class="success">
-            <?php
-            $successCount = count($uploadedFiles);
-            echo "Úspešne nahraných $successCount " . ($successCount == 1 ? "súbor" : ($successCount < 5 ? "súbory" : "súborov"));
-            ?>
-        </div>
-
-        <?php if (!empty($uploadedFiles)): ?>
-            <h2>Nahrané súbory:</h2>
-            <ul>
-                <?php foreach ($uploadedFiles as $file): ?>
-                    <li><?php echo htmlspecialchars($file); ?></li>
-                <?php endforeach; ?>
-            </ul>
-        <?php endif; ?>
-    <?php else: ?>
-        <div class="error">
-            <?php foreach ($errors as $error): ?>
-                <p><?php echo htmlspecialchars($error); ?></p>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
+// Pre AJAX odpovede
+if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+    header('Content-Type: application/json');
     
-    <div class="back">
-        <a href="index.php">Späť na hlavnú stránku</a>
-    </div>
-    
-    <div class="debug">
-        <h3>Debug informácie:</h3>
-        <h4>$_POST:</h4>
-        <?php print_r($_POST); ?>
-        
-        <h4>$_FILES:</h4>
-        <?php print_r($_FILES); ?>
-    </div>
-</body>
-</html> 
+    if (empty($errors)) {
+        echo json_encode([
+            'success' => true, 
+            'count' => count($uploadedFiles),
+            'message' => "Úspešne nahraných " . count($uploadedFiles) . " " . 
+                        (count($uploadedFiles) == 1 ? "súbor" : (count($uploadedFiles) < 5 ? "súbory" : "súborov"))
+        ]);
+    } else {
+        echo json_encode(['success' => false, 'errors' => $errors]);
+    }
+    exit;
+}
+
+// Pre klasické formuláre (keď nie je AJAX) - presmerovanie 
+if (empty($errors)) {
+    header("Location: index.php?success=" . count($uploadedFiles));
+} else {
+    header("Location: index.php?error=" . urlencode($errors[0]));
+}
+exit;
