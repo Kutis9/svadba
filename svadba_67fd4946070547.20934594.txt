@@ -1,0 +1,6 @@
+{
+    "Autor": "Lukas",
+    "Správa": "Nieco",
+    "Dátum nahratia": "2025-04-14 19:43:34",
+    "Pôvodný názov": "Designer.jpeg"
+}

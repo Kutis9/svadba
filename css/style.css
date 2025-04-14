@@ -1,259 +1,279 @@
-/* Základné štýly */
+/* Základné nastavenia */
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --primary-color: #8d553e; /* Teplejšia hnedá */
-    --secondary-color: #624a3d; /* Tmavšia hnedá */
-    --light-color: #f9efe1; /* Svetlejšia krémovo-hnedá */
-    --dark-color: #3a2c22; /* Tmavá hnedá */
-    --success-color: #5a7852; /* Olivová zelená */
-    --error-color: #a85751; /* Tehlovo červená */
-    --border-radius: 8px;
-    --box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
-    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    font-family: var(--font-family);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
-    color: var(--dark-color);
-    background-color: #f0e3cf; /* Teplejšie krémové pozadie stránky */
-    padding: 20px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    position: relative;
+    color: #333;
+    background-color: #f5f5f5;
+    padding: 0;
+    margin: 0;
 }
-
-/* Odstránenie pozadia celej stránky - už nebude potrebné */
-/* .site-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('../grafikaSvadba/pozadieSvadba.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: 0.25;
-    z-index: -1;
-} */
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    background-color: rgba(255, 252, 248, 0.3); /* Veľmi jemné krémové pozadie */
+    background-color: rgba(255, 255, 255, 0.95);
     background-image: url('../grafikaSvadba/pozadieSvadba.png');
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    position: relative;
-}
-
-/* Logo */
-.logo {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 100px;
-    height: auto;
-    z-index: 100;
-}
-
-.logo img {
-    width: 150%;
-    height: auto;
-}
-
-/* Typografia */
-h1, h2, h3 {
-    margin-bottom: 1rem;
-    color: var(--primary-color);
-    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9);
-}
-
-p {
-    margin-bottom: 1rem;
-    text-shadow: 0 0 3px rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* Hlavička */
+.logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo img {
+    max-width: 150px;
+    height: auto;
+}
+
 header {
     text-align: center;
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid rgba(90, 70, 53, 0.3); /* Teplejšia hnedá čiara */
-    padding-top: 70px; /* Priestor pre logo */
-    border-radius: var(--border-radius);
-    padding-left: 15px;
-    padding-right: 15px;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e1e1e1;
 }
 
 header h1 {
+    color: #333;
+    margin-bottom: 10px;
     font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-    text-shadow: 1px 1px 4px rgba(255, 255, 255, 1);
 }
 
 header p {
-    font-size: 1.2rem;
-    color: var(--secondary-color);
-    text-shadow: 0 0 3px rgba(255, 255, 255, 1);
+    color: #666;
+    font-size: 1.1rem;
 }
 
-/* Upload sekcia */
-#upload-section {
+/* Hlásenia */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
     text-align: center;
-    margin-bottom: 3rem;
-    border-radius: var(--border-radius);
-    padding: 20px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+/* Sekcia pre nahrávanie */
+#upload-section {
+    margin-bottom: 30px;
 }
 
 .btn-primary {
-    background-color: var(--primary-color);
+    display: block;
+    width: 200px;
+    margin: 0 auto;
+    padding: 12px 20px;
+    background-color: #8B5A2B; /* Hnedá farba pre tlačidlá */
     color: white;
     border: none;
-    padding: 12px 30px;
+    border-radius: 5px;
     font-size: 1.1rem;
     cursor: pointer;
-    border-radius: 30px;
-    transition: background-color 0.3s;
-    box-shadow: 0 2px 10px rgba(141, 85, 62, 0.4);
+    transition: background-color 0.3s ease;
 }
 
 .btn-primary:hover {
-    background-color: #73462f; /* Tmavší odtieň primárnej farby */
+    background-color: #7D4B23; /* Tmavšia hnedá pri hover */
 }
 
 #upload-form-container {
     margin-top: 20px;
     padding: 20px;
-    background-color: rgba(255, 252, 248, 0.8); /* Zachované pozadie pre formulár */
-    border-radius: var(--border-radius);
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-    border: 1px solid rgba(90, 70, 53, 0.2); /* Teplejšia hnedá čiara */
+    border-radius: 8px;
+    background-color: rgba(255, 252, 245, 0.9); /* Jemne krémové pozadie pre formulár */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .form-group {
     margin-bottom: 20px;
-    text-align: left;
 }
 
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    font-weight: 500;
-    color: var(--dark-color);
+    font-weight: 600;
+    color: #555;
 }
 
 .form-group input[type="text"],
 .form-group textarea {
     width: 100%;
-    padding: 12px;
-    border: 1px solid rgba(90, 70, 53, 0.4); /* Teplejšia hnedá čiara */
-    border-radius: var(--border-radius);
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     font-size: 1rem;
-    background-color: rgba(255, 250, 245, 0.9);
+    color: #333;
 }
 
 .form-group textarea {
-    height: 100px;
+    min-height: 100px;
     resize: vertical;
 }
 
 .form-help {
     display: block;
     margin-top: 5px;
-    font-size: 0.85rem;
-    color: var(--secondary-color);
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.upload-container {
+    background-color: rgba(255, 252, 245, 0.8); /* Jemne krémové pozadie */
+    padding: 15px;
+    border-radius: 5px;
+    border: 2px dashed #8B5A2B; /* Hnedé ohraničenie */
+}
+
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
 }
 
 .btn-submit {
-    background-color: var(--success-color);
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #8B5A2B; /* Hnedá farba pre tlačidlá */
     color: white;
     border: none;
-    padding: 12px 25px;
+    border-radius: 5px;
     font-size: 1.1rem;
     cursor: pointer;
-    border-radius: var(--border-radius);
-    transition: background-color 0.3s;
-    margin-top: 10px;
+    transition: background-color 0.3s ease;
 }
 
 .btn-submit:hover {
-    background-color: #4b6343; /* Tmavší odtieň zelenej */
+    background-color: #7D4B23; /* Tmavšia hnedá pri hover */
 }
 
-/* Galéria */
+/* Sekcia galérie */
 #gallery {
-    margin-top: 3rem;
-    border-radius: var(--border-radius);
-    padding: 20px;
+    margin-bottom: 40px;
 }
 
 #gallery h2 {
     text-align: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 20px;
+    color: #555;
+    font-size: 1.8rem;
 }
 
-#gallery-container {
+.no-content {
+    text-align: center;
+    padding: 40px 0;
+    color: #888;
+    font-style: italic;
+}
+
+/* Vlastná galéria */
+.custom-gallery-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
+    margin-top: 30px;
 }
 
 .gallery-item {
     position: relative;
     overflow: hidden;
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    transition: transform 0.3s;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
     cursor: pointer;
-    background-color: #e9dcc9; /* Teplejší krémový odtieň pre pozadie položiek */
-    aspect-ratio: 3/4;
-    border: 1px solid rgba(90, 70, 53, 0.2); /* Teplejšia hnedá čiara */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    aspect-ratio: 1/1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .gallery-item:hover {
     transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
 .gallery-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
-    transition: transform 0.3s;
+    transition: opacity 0.3s ease;
 }
 
-.gallery-item:hover img {
-    transform: scale(1.03);
+.gallery-item img.lazy-image {
+    opacity: 0.2;
+}
+
+.gallery-item img.loaded {
+    opacity: 1;
+}
+
+.item-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 8px 12px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-item:hover .item-info {
+    opacity: 1;
+}
+
+.loaded-container .item-info {
+    opacity: 0;
+}
+
+.loaded-container:hover .item-info {
+    opacity: 1;
 }
 
 .video-thumbnail {
     position: relative;
     width: 100%;
     height: 100%;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .video-placeholder {
-    width: 100%;
-    height: 100%;
-    background-color: var(--secondary-color);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+    color: #888;
+    text-align: center;
 }
 
 .play-icon {
@@ -261,9 +281,9 @@ header p {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60px;
-    height: 60px;
-    background-color: rgba(58, 44, 34, 0.7); /* Tmavá farba s priehľadnosťou */
+    width: 50px;
+    height: 50px;
+    background-color: rgba(139, 90, 43, 0.7); /* Hnedá farba pre play ikonu */
     border-radius: 50%;
 }
 
@@ -273,153 +293,272 @@ header p {
     top: 50%;
     left: 55%;
     transform: translate(-50%, -50%);
-    border-style: solid;
-    border-width: 15px 0 15px 25px;
-    border-color: transparent transparent transparent white;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 15px solid white;
 }
 
-.item-info {
-    position: absolute;
-    bottom: 0;
+/* Modal pre galériu */
+.custom-gallery-modal {
+    display: none;
+    position: fixed;
+    top: 0;
     left: 0;
-    right: 0;
-    padding: 12px;
-    background-color: rgba(58, 44, 34, 0.75); /* Tmavá farba s priehľadnosťou */
-    color: white;
-}
-
-.item-date {
-    font-size: 0.85rem;
-}
-
-.no-content {
-    text-align: center;
-    padding: 50px 20px;
-    color: var(--secondary-color);
-    background-color: rgba(255, 250, 245, 0.8); /* Zachované pozadie, len svetlejšie */
-    border-radius: var(--border-radius);
-    border: 1px solid rgba(90, 70, 53, 0.2); /* Teplejšia hnedá čiara */
-}
-
-/* Notifikácie */
-.alert {
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: var(--border-radius);
-    text-align: center;
-    transition: opacity 0.5s; /* Pridané pre plynulý prechod */
-}
-
-.alert-success {
-    background-color: rgba(90, 120, 82, 0.2); /* Jemný olivový odtieň */
-    color: #3a503c;
-    border: 1px solid rgba(90, 120, 82, 0.3);
-}
-
-.alert-error {
-    background-color: rgba(168, 87, 81, 0.2); /* Jemný tehlový odtieň */
-    color: #72403b;
-    border: 1px solid rgba(168, 87, 81, 0.3);
-}
-
-.alert-info {
-    background-color: rgba(70, 100, 150, 0.2); /* Jemný modrý odtieň */
-    color: #2c4c6b;
-    border: 1px solid rgba(70, 100, 150, 0.3);
-}
-
-/* Výraznejší zelený ribbon pre oznámenie o úspešnom nahratí */
-#status-message.alert-success {
-    background-color: rgba(90, 120, 82, 0.3); /* Výraznejší olivový odtieň */
-    color: #2a3c2c;
-    border: 1px solid rgba(90, 120, 82, 0.5);
-    box-shadow: 0 2px 10px rgba(90, 120, 82, 0.2);
-    font-weight: 500;
-    padding: 18px;
-}
-
-/* Vlastné štýly pre formulár uploadu */
-input[type="file"] {
-    display: block;
     width: 100%;
-    padding: 15px;
-    background-color: rgba(255, 250, 245, 0.8); /* Svetlé pozadie */
-    border: 2px dashed rgba(90, 70, 53, 0.4); /* Teplejšia hnedá čiara */
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: 1rem;
-    color: var(--secondary-color);
-    margin-bottom: 10px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
 }
 
+.custom-gallery-modal.open {
+    display: flex;
+    opacity: 1;
+}
+
+.gallery-modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 1200px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.gallery-close {
+    position: absolute !important;
+    top: 5px !important;
+    right: 20px !important;
+    color: white !important;
+    font-size: 35px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    z-index: 1050 !important; /* Zvýšená hodnota z-index */
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.7) !important;
+    width: 45px !important;
+    height: 45px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    line-height: 1 !important;
+}
+
+.gallery-navigation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1001;
+    pointer-events: none;
+}
+
+.gallery-navigation button {
+    background-color: rgba(139, 90, 43, 0.5); /* Hnedá farba pre navigačné tlačidlá */
+    color: white;
+    font-size: 24px;
+    width: 40px;
+    height: 60px;
+    border: none;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+}
+
+.gallery-navigation button:hover {
+    background-color: rgba(139, 90, 43, 0.8); /* Tmavšia hnedá pri hover */
+}
+
+.gallery-main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+.gallery-media-container {
+    width: 100%;
+    height: 80vh;
+    max-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.gallery-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-video {
+    max-width: 100%;
+    max-height: 100%;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-caption {
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    color: white;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.image-loading-placeholder,
+.video-loading-placeholder {
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(139, 90, 43, 0.7); /* Hnedé pozadie pre loading správu */
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.media-error {
+    color: #f8d7da;
+    background-color: rgba(220, 53, 69, 0.7);
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    max-width: 90%;
+}
+
+/* Náhľad vybraných súborov */
 .selected-files-container {
     margin-top: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px solid #ddd;
 }
 
 .file-list {
     list-style: none;
-    padding: 0;
-    margin: 10px 0;
 }
 
 .file-item {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
     padding: 8px;
-    background-color: rgba(255, 250, 245, 0.8); /* Svetlé pozadie */
-    border-radius: var(--border-radius);
-    border: 1px solid rgba(90, 70, 53, 0.2); /* Teplejšia hnedá čiara */
+    margin-bottom: 8px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    border-left: 3px solid #8B5A2B; /* Hnedé zvýraznenie */
+}
+
+.file-item:last-child {
+    margin-bottom: 0;
+}
+
+.file-error {
+    border-left-color: #dc3545;
 }
 
 .file-preview {
     width: 60px;
     height: 60px;
     object-fit: cover;
-    border-radius: 4px;
     margin-right: 10px;
-    border: 1px solid rgba(90, 70, 53, 0.3); /* Teplejšia hnedá čiara */
+    border-radius: 4px;
 }
 
 .video-icon {
     width: 60px;
     height: 60px;
     display: flex;
-    align-items: center;
     justify-content: center;
-    background-color: var(--secondary-color);
-    color: white;
-    border-radius: 4px;
+    align-items: center;
+    background-color: #e9ecef;
     margin-right: 10px;
-    font-size: 24px;
+    border-radius: 4px;
+    font-size: 1.5rem;
 }
 
 .file-info {
     flex: 1;
-    font-size: 0.9rem;
-    word-break: break-all;
-    color: var(--dark-color);
+    font-size: 0.85rem;
 }
 
-/* Footer */
+.file-size-error {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Spinner pre nahrávanie */
+.upload-spinner-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 9999;
+}
+
+.upload-spinner {
+    width: 70px;
+    height: 70px;
+    border: 8px solid rgba(255, 255, 255, 0.3);
+    border-top: 8px solid #8B5A2B; /* Hnedá farba pre spinner */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.upload-progress-text {
+    color: white;
+    margin-top: 20px;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Päta stránky */
 footer {
     text-align: center;
-    margin-top: 3rem;
-    padding-top: 2rem;
-    padding-bottom: 1rem;
-    border-top: 1px solid rgba(90, 70, 53, 0.3); /* Teplejšia hnedá čiara */
-    color: var(--secondary-color);
+    padding-top: 20px;
+    border-top: 1px solid #e1e1e1;
+    color: #888;
     font-size: 0.9rem;
-    border-radius: var(--border-radius);
-    text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
 }
 
 /* Responzívny dizajn */
-@media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
-    
+@media screen and (max-width: 768px) {
     .container {
         padding: 15px;
     }
@@ -428,104 +567,56 @@ footer {
         font-size: 2rem;
     }
     
-    #gallery-container {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 15px;
+    .custom-gallery-container {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
     }
     
-    .btn-primary, .btn-submit {
-        padding: 10px 20px;
-        font-size: 1rem;
+    .btn-primary {
+        width: 100%;
     }
     
-    .logo {
-        width: 80px;
-        top: 15px;
-        left: 15px;
+    .gallery-modal-content {
+        width: 95%;
     }
     
-    header {
-        padding-top: 60px;
+    .gallery-navigation button {
+        font-size: 20px;
+        width: 30px;
+        height: 50px;
+    }
+    
+    .gallery-media-container {
+        height: 60vh;
+    }
+    
+    /* Optimalizácia pre malé displeje */
+    .gallery-main-container {
+        padding: 10px;
     }
 }
 
-@media (max-width: 480px) {
+/* Optimalizácia pre veľmi malé displeje */
+@media screen and (max-width: 480px) {
+    .custom-gallery-container {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 8px;
+    }
+    
     header h1 {
         font-size: 1.8rem;
     }
     
-    #gallery-container {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 10px;
+    header p {
+        font-size: 1rem;
     }
     
-    .gallery-item {
-        aspect-ratio: 1/1;
+    .gallery-caption {
+        font-size: 12px;
+        padding: 8px 12px;
     }
     
-    .item-info {
-        padding: 8px;
+    .gallery-media-container {
+        height: 50vh;
     }
-    
-    .logo {
-        width: 60px;
-        top: 10px;
-        left: 10px;
-    }
-    
-    header {
-        padding-top: 50px;
-    }
-}
-
-/* Lazy loading obrázkov */
-.lazy-image {
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-
-.loaded {
-    opacity: 1;
-}
-
-/* Placeholder pre obrázky pred načítaním */
-.gallery-item a {
-    position: relative;
-    display: block;
-    width: 100%;
-    height: 100%;
-    background-color: #e9dcc9; /* Jemné krémové pozadie pre placeholder */
-}
-
-/* Spinner pre načítavanie */
-.gallery-item a::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 30px;
-    height: 30px;
-    margin: -15px 0 0 -15px;
-    border: 3px solid rgba(90, 70, 53, 0.3);
-    border-top-color: var(--primary-color);
-    border-radius: 50%;
-    animation: spinner 0.7s infinite linear;
-    z-index: 1;
-    opacity: 0.7;
-}
-
-@keyframes spinner {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* Skryť spinner po načítaní */
-.gallery-item a img.loaded + .gallery-item a::before {
-    display: none;
-}
-
-/* Oprava pre spinner - pridáme novú triedu pre rodičovský element */
-.gallery-item a.loaded-container::before {
-    display: none !important;
 }

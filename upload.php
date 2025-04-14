@@ -4,6 +4,13 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Nastavenie limitov pre veľké súbory
+ini_set('upload_max_filesize', '300M');
+ini_set('post_max_size', '300M');
+ini_set('memory_limit', '512M');
+ini_set('max_execution_time', 300); // 5 minút
+ini_set('max_input_time', 300); // 5 minút
+
 // Ladenie - uložíme si všetky informácie o požiadavke
 file_put_contents('upload_debug.log', "===== UPLOAD REQUEST =====" . PHP_EOL . 
                   "Time: " . date('Y-m-d H:i:s') . PHP_EOL .
@@ -61,7 +68,8 @@ if (isset($_FILES['media']) && !empty($_FILES['media']['name'][0])) {
     
     // Podporované typy súborov
     $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'mov', 'heic', 'heif'];
-    $maxFileSize = 50 * 1024 * 1024; // 50 MB
+    $maxImageSize = 50 * 1024 * 1024; // 50 MB pre obrázky
+    $maxVideoSize = 300 * 1024 * 1024; // 300 MB pre videá
     
     for ($i = 0; $i < $fileCount; $i++) {
         $fileName = $_FILES['media']['name'][$i];
@@ -72,6 +80,8 @@ if (isset($_FILES['media']) && !empty($_FILES['media']['name'][0])) {
         file_put_contents('upload_debug.log', "Processing file: $fileName, size: $fileSize, tmp: $fileTmpName, error: $fileError" . PHP_EOL, FILE_APPEND);
         
         $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        $isVideo = in_array($fileExt, ['mp4', 'mov']);
+        $maxFileSize = $isVideo ? $maxVideoSize : $maxImageSize;
         
         // Kontrola chýb
         if ($fileError !== 0) {
@@ -82,15 +92,9 @@ if (isset($_FILES['media']) && !empty($_FILES['media']['name'][0])) {
         
         // Kontrola veľkosti
         if ($fileSize > $maxFileSize) {
-            $errors[] = "Súbor $fileName je príliš veľký. Maximálna veľkosť je 50 MB.";
+            $maxSizeText = $isVideo ? "300 MB" : "50 MB";
+            $errors[] = "Súbor $fileName je príliš veľký. Maximálna veľkosť je $maxSizeText.";
             file_put_contents('upload_debug.log', "File too large: $fileSize > $maxFileSize" . PHP_EOL, FILE_APPEND);
-            continue;
-        }
-        
-        // Kontrola typu súboru
-        if (!in_array($fileExt, $allowedExtensions)) {
-            $errors[] = "Súbor $fileName má nepovolený formát. Povolené formáty: " . implode(', ', $allowedExtensions);
-            file_put_contents('upload_debug.log', "Invalid file type: $fileExt" . PHP_EOL, FILE_APPEND);
             continue;
         }
         

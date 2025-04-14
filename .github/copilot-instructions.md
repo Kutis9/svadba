@@ -33,6 +33,6 @@ Komunikuj v Slovenskom jazyku
 - Optimalizuj JavaScript kód pre mobilné zariadenia
 
 ## Podporované formáty a limity
-- Maximálna veľkosť súboru: 50 MB
+- Maximálna veľkosť súborov: 50 MB pre obrázky, 300 MB pre videá
 - Podporované formáty: JPG, PNG, GIF, WEBP, MP4, MOV, HEIC, HEIF
 - Preferované rozlíšenie videí: 1080p alebo nižšie
