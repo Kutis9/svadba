@@ -888,7 +888,15 @@ $cacheBusting = time();
         const galleryItems = document.querySelectorAll('.gallery-item');
         const modal = document.getElementById('custom-gallery-modal');
         
-        if (!modal || !window.customGalleryData) return;
+        if (!modal) {
+            console.log('Modal nenájdený, nie je možné aktualizovať galériu');
+            return;
+        }
+        
+        // Inicializácia globálnej premennej pre galériu, ak neexistuje
+        if (!window.customGalleryData) {
+            window.customGalleryData = [];
+        }
         
         // Resetovať galériu
         window.customGalleryData = [];
@@ -903,30 +911,161 @@ $cacheBusting = time();
             });
         });
         
+        // Inicializovať globálnu funkciu pre otvorenie galérie, ak neexistuje
+        if (typeof window.openCustomGallery !== 'function' && window.initializeCustomGallery) {
+            console.log('Inicializácia openCustomGallery funkcie');
+            window.openCustomGallery = function(index) {
+                if (index >= 0 && index < window.customGalleryData.length) {
+                    const modal = document.getElementById('custom-gallery-modal');
+                    const mediaContainer = modal.querySelector('.gallery-media-container');
+                    const counter = modal.querySelector('.gallery-counter');
+                    const dateDisplay = modal.querySelector('.gallery-date');
+                    
+                    // Nastaviť aktuálny index
+                    window.currentGalleryIndex = index;
+                    
+                    // Načítať médium
+                    const item = window.customGalleryData[index];
+                    
+                    // Vyčistiť kontajner
+                    mediaContainer.innerHTML = '';
+                    
+                    if (item.type === 'image') {
+                        const img = document.createElement('img');
+                        img.src = item.path;
+                        img.classList.add('gallery-image');
+                        mediaContainer.appendChild(img);
+                    } else if (item.type === 'video') {
+                        const video = document.createElement('video');
+                        video.src = item.path;
+                        video.controls = true;
+                        video.playsInline = true;
+                        video.classList.add('gallery-video');
+                        mediaContainer.appendChild(video);
+                    }
+                    
+                    // Aktualizovať počítadlo a dátum
+                    counter.textContent = `${index + 1} / ${window.customGalleryData.length}`;
+                    dateDisplay.textContent = item.date;
+                    
+                    // Zobraziť/skryť navigačné tlačidlá
+                    const prevBtn = modal.querySelector('.gallery-prev');
+                    const nextBtn = modal.querySelector('.gallery-next');
+                    if (prevBtn) prevBtn.style.visibility = index > 0 ? 'visible' : 'hidden';
+                    if (nextBtn) nextBtn.style.visibility = index < window.customGalleryData.length - 1 ? 'visible' : 'hidden';
+                    
+                    // Otvoriť modálne okno
+                    modal.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                }
+            };
+        }
+        
         // Pridať event listener pre každú položku v galérií (vrátane novo načítaných)
         galleryItems.forEach(item => {
+            const itemType = item.getAttribute('data-type');
+            
             // Odstrániť existujúce listenery, aby nedochádzalo k duplikácii
             const newItem = item.cloneNode(true);
             item.parentNode.replaceChild(newItem, item);
             
-            // Manuálne načítať obrázok z data-src pre novo pridané položky
-            const lazyImage = newItem.querySelector('img.lazy-image');
-            if (lazyImage && lazyImage.dataset.src) {
-                // Vytvoriť nový Image element pre načítanie obrázka
-                const tempImg = new Image();
-                tempImg.onload = function() {
-                    lazyImage.src = lazyImage.dataset.src;
-                    lazyImage.classList.remove('lazy-image');
-                    lazyImage.classList.add('loaded');
-                    lazyImage.removeAttribute('data-src');
+            if (itemType === 'image') {
+                // Logika pre obrázky - manuálne načítať z data-src
+                const lazyImage = newItem.querySelector('img.lazy-image');
+                if (lazyImage && lazyImage.dataset.src) {
+                    console.log('Manuálne načítavanie obrázka:', lazyImage.dataset.src);
+                    // Vytvoriť nový Image element pre načítanie obrázka
+                    const tempImg = new Image();
+                    tempImg.onload = function() {
+                        lazyImage.src = lazyImage.dataset.src;
+                        lazyImage.classList.remove('lazy-image');
+                        lazyImage.classList.add('loaded');
+                        lazyImage.removeAttribute('data-src');
+                        
+                        if (lazyImage.parentElement) {
+                            lazyImage.parentElement.classList.add('loaded-container');
+                        }
+                    };
+                    tempImg.src = lazyImage.dataset.src;
+                }
+            } else if (itemType === 'video') {
+                // Logika pre videá - manuálne inicializovať video náhľad
+                const videoElement = newItem.querySelector('video.video-preview');
+                const canvasElement = newItem.querySelector('canvas.video-thumbnail-canvas');
+                const videoPlaceholder = newItem.querySelector('.video-placeholder');
+                
+                if (videoElement && canvasElement) {
+                    console.log('Inicializujem náhľad pre video:', videoElement.src);
                     
-                    if (lazyImage.parentElement) {
-                        lazyImage.parentElement.classList.add('loaded-container');
+                    // Odstránenie existujúcich event listenerov
+                    const newVideo = videoElement.cloneNode(true);
+                    if (videoElement.parentNode) {
+                        videoElement.parentNode.replaceChild(newVideo, videoElement);
                     }
-                };
-                tempImg.src = lazyImage.dataset.src;
+                    
+                    // Po načítaní metadát vykresliť prvý frame do canvas
+                    newVideo.addEventListener('loadedmetadata', function() {
+                        console.log('Video metadata načítané, nastavujem currentTime');
+                        // Nastaviť čas na 0.5 sekundy pre získanie prvého zaujímavého frame-u
+                        this.currentTime = 0.5;
+                    });
+                    
+                    // Po aktualizácii času vykresliť frame
+                    newVideo.addEventListener('timeupdate', function() {
+                        console.log('Video timeupdate event, vykresľujem frame');
+                        // Vykresliť frame na canvas
+                        const ctx = canvasElement.getContext('2d');
+                        
+                        // Zachovať pomer strán
+                        const width = canvasElement.width;
+                        const height = canvasElement.height;
+                        const videoWidth = this.videoWidth;
+                        const videoHeight = this.videoHeight;
+                        
+                        let drawWidth, drawHeight, x, y;
+                        
+                        // Výpočet správnych rozmerov pre zachovanie pomeru strán
+                        if (videoWidth / videoHeight > width / height) {
+                            // Video je širšie ako canvas - prispôsobiť výšku
+                            drawWidth = width;
+                            drawHeight = (videoHeight / videoWidth) * width;
+                            x = 0;
+                            y = (height - drawHeight) / 2;
+                        } else {
+                            // Video je vyššie ako canvas - prispôsobiť šírku
+                            drawHeight = height;
+                            drawWidth = (videoWidth / videoHeight) * height;
+                            x = (width - drawWidth) / 2;
+                            y = 0;
+                        }
+                        
+                        // Vyplniť pozadie
+                        ctx.fillStyle = '#000000';
+                        ctx.fillRect(0, 0, width, height);
+                        
+                        // Vykresliť frame
+                        try {
+                            ctx.drawImage(this, x, y, drawWidth, drawHeight);
+                            console.log('Frame vykreslený na canvas');
+                            
+                            // Skryť placeholder po úspešnom vykreslení
+                            if (videoPlaceholder) {
+                                videoPlaceholder.style.display = 'none';
+                            }
+                        } catch (e) {
+                            console.error('Chyba pri vykreslení náhľadu videa:', e);
+                        }
+                        
+                        // Zastaviť sledovanie, jednorazové vykreslenie stačí
+                        this.removeEventListener('timeupdate', arguments.callee);
+                    });
+                    
+                    // Začiatok načítavania videa
+                    newVideo.load();
+                }
             }
             
+            // Pridať nový event listener pre kliknutie
             newItem.addEventListener('click', function() {
                 const index = parseInt(this.getAttribute('data-index'));
                 if (typeof window.openCustomGallery === 'function') {
@@ -934,6 +1073,8 @@ $cacheBusting = time();
                 }
             });
         });
+        
+        console.log('Galéria aktualizovaná s ' + window.customGalleryData.length + ' položkami');
     }
     
     /**
@@ -1064,7 +1205,7 @@ $cacheBusting = time();
                                 }
                             }
                             
-                            // Odstrániť atribút data-src, aby sme zabránili opakovanému načítaniu
+                            // Odstrániť atribút data-src, aby sme zabránili opakovanému načítavaniu
                             lazyImage.removeAttribute('data-src');
                         }
                         

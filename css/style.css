@@ -40,7 +40,7 @@ header {
     text-align: center;
     margin-bottom: 30px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #e1e1e1;
+    border-bottom: 1px solid #8b5a2b21;
 }
 
 header h1 {
@@ -589,7 +589,7 @@ input[type="file"] {
 footer {
     text-align: center;
     padding-top: 20px;
-    border-top: 1px solid #e1e1e1;
+    border-top: 1px solid #8b5a2b21;
     color: #888;
     font-size: 0.9rem;
 }
