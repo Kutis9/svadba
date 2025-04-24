@@ -4,6 +4,66 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Kontrola AJAX požiadavky pre načítanie ďalších fotografií
+if (isset($_GET['action']) && $_GET['action'] === 'loadMoreMedia') {
+    $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
+    $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
+    
+    // Získanie ďalších médiových súborov
+    $additionalFiles = getGalleryFiles($limit, $offset);
+    
+    // Zistíme koľko je celkovo súborov v galérii
+    $allFiles = getGalleryFiles(); 
+    $totalFiles = count($allFiles);
+    
+    // Pripravíme HTML kód pre galériu
+    $html = '';
+    foreach ($additionalFiles as $index => $file) {
+        $fileType = $file['type'];
+        $filePath = $file['path'];
+        $fileDate = date('d.m.Y H:i', $file['date']);
+        $isVideo = $fileType === 'video';
+        
+        $html .= '<div class="gallery-item" data-type="' . $fileType . '" data-index="' . ($index + $offset) . '" 
+                 data-path="' . $filePath . '" data-date="' . $fileDate . '">';
+        
+        if ($isVideo) {
+            $html .= '<div class="video-thumbnail">
+                        <video class="video-preview" preload="metadata" src="' . $filePath . '#t=0.5" style="display:none;"></video>
+                        <canvas class="video-thumbnail-canvas" width="300" height="300"></canvas>
+                        <div class="video-placeholder">Video</div>
+                        <div class="play-icon"></div>
+                    </div>';
+        } else {
+            $html .= '<img class="lazy-image" 
+                     data-src="' . $filePath . '" 
+                     src="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 3 4\'%3E%3C/svg%3E"
+                     alt="Fotka zo svadby">';
+        }
+        
+        $html .= '<div class="item-info">
+                    <span class="item-date">' . $fileDate . '</span>
+                  </div>';
+        
+        $html .= '</div>';
+    }
+    
+    // Vypočítame, či existujú ďalšie súbory
+    $hasMore = ($offset + count($additionalFiles)) < $totalFiles;
+    
+    // Vrátime JSON odpoveď
+    header('Content-Type: application/json');
+    echo json_encode([
+        'html' => $html,
+        'count' => count($additionalFiles),
+        'hasMore' => $hasMore,
+        'totalLoaded' => $offset + count($additionalFiles),
+        'totalFiles' => $totalFiles,
+        'debug' => 'Offset: ' . $offset . ', Limit: ' . $limit . ', Total: ' . $totalFiles
+    ]);
+    exit;
+}
+
 // Kontrola existencie adresára uploads
 if (!file_exists('uploads')) {
     mkdir('uploads', 0777, true);
@@ -11,31 +71,51 @@ if (!file_exists('uploads')) {
 }
 
 // Funkcia na získanie zoznamu súborov z adresára uploads
-function getGalleryFiles() {
+function getGalleryFiles($limit = null, $offset = 0) {
     $dir = 'uploads/';
     $files = [];
     
     if (is_dir($dir)) {
         $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'mov', 'heic', 'heif'];
+        $allFiles = [];
         
         foreach (scandir($dir) as $file) {
-            if ($file !== '.' && $file !== '..' && !strstr($file, '.txt')) {
-                $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-                if (in_array($ext, $allowedExtensions)) {
-                    $files[] = [
+            // Preskočiť aktuálny adresár, rodičovský adresár a súbory s metadátami
+            if ($file === '.' || $file === '..' || pathinfo($file, PATHINFO_EXTENSION) === 'txt') {
+                continue;
+            }
+            
+            $filePath = $dir . $file;
+            
+            // Kontrola či ide o súbor
+            if (is_file($filePath)) {
+                $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                
+                // Kontrola či ide o podporovaný typ súboru
+                if (in_array($extension, $allowedExtensions)) {
+                    $fileType = in_array($extension, ['mp4', 'mov']) ? 'video' : 'image';
+                    
+                    $allFiles[] = [
                         'name' => $file,
-                        'path' => $dir . $file,
-                        'date' => filemtime($dir . $file),
-                        'type' => in_array($ext, ['mp4', 'mov']) ? 'video' : 'image'
+                        'path' => $filePath,
+                        'type' => $fileType,
+                        'date' => filemtime($filePath)
                     ];
                 }
             }
         }
         
         // Zoradenie podľa dátumu - najnovšie najprv
-        usort($files, function($a, $b) {
+        usort($allFiles, function($a, $b) {
             return $b['date'] - $a['date'];
         });
+        
+        // Aplikovanie limitu a offsetu ak sú nastavené
+        if ($limit !== null) {
+            $files = array_slice($allFiles, $offset, $limit);
+        } else {
+            $files = $allFiles;
+        }
     }
     
     return $files;
@@ -59,6 +139,9 @@ $cacheBusting = time();
     
     <!-- Základné CSS -->
     <link rel="stylesheet" href="css/style.css?v=<?php echo $cacheBusting; ?>">
+    
+    <!-- JavaScript súbory -->
+    <script src="js/main.js?v=<?php echo $cacheBusting; ?>" defer></script>
 </head>
 <body>
     <div class="upload-spinner-container">
@@ -153,7 +236,13 @@ $cacheBusting = time();
                 </div>
             <?php else: ?>
                 <div id="gallery-container" class="custom-gallery-container">
-                    <?php foreach ($galleryFiles as $index => $file): ?>
+                    <?php 
+                    // Limit pre prvé načítanie - zobrazíme len prvých 10 položiek
+                    $initialLimit = 10;
+                    $initialFiles = getGalleryFiles($initialLimit, 0);
+                    $totalFiles = count(getGalleryFiles()); // Celkový počet súborov
+                    
+                    foreach ($initialFiles as $index => $file): ?>
                         <?php 
                         $isVideo = $file['type'] === 'video';
                         $thumbnailPath = $file['path'];
@@ -163,6 +252,7 @@ $cacheBusting = time();
                              data-path="<?php echo $file['path']; ?>" 
                              data-date="<?php echo date('d.m.Y H:i', $file['date']); ?>">
                             
+
                             <?php if ($isVideo): ?>
                                 <div class="video-thumbnail">
                                     <video class="video-preview" preload="metadata" src="<?php echo $thumbnailPath; ?>#t=0.5" style="display:none;"></video>
@@ -183,35 +273,23 @@ $cacheBusting = time();
                         </div>
                     <?php endforeach; ?>
                 </div>
+                
+                <?php if ($totalFiles > $initialLimit): ?>
+                    <div class="load-more-container">
+                        <button id="load-more-btn" class="btn-primary">Zobraziť ďalšie</button>
+                        <div id="loading-indicator" style="display: none;">Načítavam...</div>
+                    </div>
+                <?php endif; ?>
             <?php endif; ?>
         </section>
         
         <footer>
-            <p>&copy; <?php echo date('Y'); ?> Svadba Mišky a Lukáša. Ďakujeme.</p>
+            <p>&copy; <?php echo date('Y'); ?> Svadba Mišky a Lukáša.</p>
         </footer>
     </div>
     
     <!-- JavaScript -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('Aplikácia bola načítaná');
-        
-        // Inicializácia formulára
-        initializeUploadForm();
-        
-        // Inicializácia vlastnej galérie
-        initializeCustomGallery();
-        
-        // Automatické skrytie hlásení
-        handleAlerts();
-        
-        // Zobrazenie vybraných súborov
-        initializeFileInput();
-        
-        // Inicializácia lazy loading pre obrázky
-        initializeLazyLoading();
-    });
-    
     /**
      * Inicializácia formulára pre nahrávanie súborov
      */
@@ -352,6 +430,20 @@ $cacheBusting = time();
                 xhr.open('POST', uploadForm.getAttribute('action'), true);
                 xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                 
+                // Nastavenie timeoutu pre dlhé nahrávania (10 minút)
+                xhr.timeout = 600000; // 10 minút v milisekundách
+                
+                // Event listener pre sledovanie priebehu nahrávania
+                xhr.upload.addEventListener('progress', function(e) {
+                    if (e.lengthComputable) {
+                        const percentComplete = Math.round((e.loaded / e.total) * 100);
+                        const progressText = document.querySelector('.upload-progress-text');
+                        if (progressText) {
+                            progressText.textContent = `Nahrávanie súborov: ${percentComplete}% (${formatFileSize(e.loaded)} / ${formatFileSize(e.total)})`;
+                        }
+                    }
+                });
+                
                 xhr.onload = function() {
                     // Skryť spinner
                     hideUploadSpinner();
@@ -404,6 +496,11 @@ $cacheBusting = time();
                 xhr.onerror = function() {
                     hideUploadSpinner();
                     showStatusMessage('Nastala chyba pri komunikácii so serverom.', 'error');
+                };
+                
+                xhr.ontimeout = function() {
+                    hideUploadSpinner();
+                    showStatusMessage('Vypršal čas pre nahrávanie súborov. Skúste menší súbor alebo skontrolujte pripojenie k internetu.', 'error');
                 };
                 
                 xhr.send(formData);
@@ -705,78 +802,6 @@ $cacheBusting = time();
             }
         }
         
-        /**
-         * Inicializácia náhľadov videí
-         */
-        function initializeVideoThumbnails() {
-            const videoItems = document.querySelectorAll('.gallery-item[data-type="video"]');
-            
-            videoItems.forEach(item => {
-                const videoElement = item.querySelector('video.video-preview');
-                const canvasElement = item.querySelector('canvas.video-thumbnail-canvas');
-                const videoPlaceholder = item.querySelector('.video-placeholder');
-                
-                if (!videoElement || !canvasElement) return;
-                
-                // Po načítaní metadát vykresliť prvý frame do canvas
-                videoElement.addEventListener('loadedmetadata', function() {
-                    // Nastaviť čas na 0.5 sekundy pre získanie prvého zaujímavého frame-u
-                    videoElement.currentTime = 0.5;
-                });
-                
-                // Po aktualizácii času vykresliť frame
-                videoElement.addEventListener('timeupdate', function() {
-                    // Vykresliť frame na canvas
-                    const ctx = canvasElement.getContext('2d');
-                    
-                    // Zachovať pomer strán
-                    const width = canvasElement.width;
-                    const height = canvasElement.height;
-                    const videoWidth = videoElement.videoWidth;
-                    const videoHeight = videoElement.videoHeight;
-                    
-                    let drawWidth, drawHeight, x, y;
-                    
-                    // Výpočet správnych rozmerov pre zachovanie pomeru strán
-                    if (videoWidth / videoHeight > width / height) {
-                        // Video je širšie ako canvas - prispôsobiť výšku
-                        drawWidth = width;
-                        drawHeight = (videoHeight / videoWidth) * width;
-                        x = 0;
-                        y = (height - drawHeight) / 2;
-                    } else {
-                        // Video je vyššie ako canvas - prispôsobiť šírku
-                        drawHeight = height;
-                        drawWidth = (videoWidth / videoHeight) * height;
-                        x = (width - drawWidth) / 2;
-                        y = 0;
-                    }
-                    
-                    // Vyplniť pozadie
-                    ctx.fillStyle = '#f0f0f0';
-                    ctx.fillRect(0, 0, width, height);
-                    
-                    // Vykresliť frame
-                    try {
-                        ctx.drawImage(videoElement, x, y, drawWidth, drawHeight);
-                        
-                        // Skryť placeholder po úspešnom vykreslení
-                        if (videoPlaceholder) {
-                            videoPlaceholder.style.display = 'none';
-                        }
-                    } catch (e) {
-                        console.error('Chyba pri vykreslení náhľadu videa:', e);
-                    }
-                    
-                    // Zastaviť sledovanie, jednorazové vykreslenie stačí
-                    videoElement.removeEventListener('timeupdate', arguments.callee);
-                });
-                
-                // Začiatok načítavania videa
-                videoElement.load();
-            });
-        }
-        
         // Pridať podporu pre dotykové gestá (swipe)
         let touchStartX = 0;
         let touchEndX = 0;
@@ -813,24 +838,100 @@ $cacheBusting = time();
     }
     
     /**
-     * Spracovanie hlásení o úspechu/chybe
+     * Inicializácia funkcionalita "Zobraziť ďalšie"
      */
-    function handleAlerts() {
-        const alerts = document.querySelectorAll('.alert');
-        if (alerts.length) {
-            setTimeout(function() {
-                alerts.forEach(function(alert) {
-                    alert.style.opacity = '0';
-                    alert.style.transition = 'opacity 0.5s';
+    function initializeLoadMore() {
+        const loadMoreBtn = document.getElementById('load-more-btn');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const galleryContainer = document.getElementById('gallery-container');
+        
+        // Počiatočný offset pre načítanie ďalších položiek
+        let currentOffset = <?php echo isset($initialLimit) ? $initialLimit : 10; ?>;
+        const limit = 10; // Počet položiek na načítanie
+        
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', function() {
+                console.log('Kliknutie na tlačidlo "Zobraziť ďalšie"');
+                
+                // Skryť tlačidlo a zobraziť indikátor načítavania
+                loadMoreBtn.style.display = 'none';
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'block';
+                }
+                
+                // AJAX požiadavka pre načítanie ďalších položiek
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', `index.php?action=loadMoreMedia&offset=${currentOffset}&limit=${limit}`, true);
+                
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            console.log('Server odpoveď:', response);
+                            
+                            if (response.html && response.count > 0) {
+                                // Pridanie nových položiek do galérie
+                                galleryContainer.insertAdjacentHTML('beforeend', response.html);
+                                
+                                // Aktualizovať offset
+                                currentOffset += response.count;
+                                
+                                // Inicializovať lazy loading pre nové obrázky
+                                initializeLazyLoading();
+                                
+                                // Inicializovať náhľady videí pre nové položky
+                                initializeVideoThumbnails();
+                                
+                                // Aktualizovať galériu pomocou funkcie z main.js
+                                if (typeof window.updateGalleryItems === 'function') {
+                                    window.updateGalleryItems();
+                                } else {
+                                    // Fallback ak funkcia nie je dostupná
+                                    updateCustomGallery();
+                                }
+                                
+                                console.log(`Načítaných ${response.count} nových položiek, celkovo ${response.totalLoaded}/${response.totalFiles}`);
+                                
+                                // Zobraziť tlačidlo "Zobraziť ďalšie" len ak existujú ďalšie položky
+                                if (response.hasMore) {
+                                    loadMoreBtn.style.display = 'block';
+                                }
+                            } else {
+                                console.log('Žiadne ďalšie položky na načítanie');
+                                // Ak nie sú žiadne ďalšie položky, tlačidlo zostane skryté
+                            }
+                        } catch (e) {
+                            console.error('Chyba pri spracovaní JSON odpovede:', e);
+                            alert('Nastala chyba pri načítaní ďalších fotografií.');
+                            loadMoreBtn.style.display = 'block';
+                        }
+                    } else {
+                        console.error('AJAX chyba:', xhr.status);
+                        alert('Nastala chyba pri načítaní ďalších fotografií.');
+                        loadMoreBtn.style.display = 'block';
+                    }
                     
-                    setTimeout(function() {
-                        alert.style.display = 'none';
-                    }, 500);
-                });
-            }, 5000);
+                    // Skryť indikátor načítavania v každom prípade
+                    if (loadingIndicator) {
+                        loadingIndicator.style.display = 'none';
+                    }
+                };
+                
+                xhr.onerror = function() {
+                    console.error('AJAX požiadavka zlyhala');
+                    alert('Nastala chyba pri načítaní ďalších fotografií.');
+                    loadMoreBtn.style.display = 'block';
+                    
+                    if (loadingIndicator) {
+                        loadingIndicator.style.display = 'none';
+                    }
+                };
+                
+                xhr.send();
+            });
         }
     }
-    
+
     /**
      * Inicializácia lazy loading pre obrázky v galérii
      */
@@ -867,9 +968,6 @@ $cacheBusting = time();
             });
             
             console.log('Lazy loading inicializovaný pre ' + lazyImages.length + ' obrázkov');
-            
-            // Inicializácia náhľadov videí
-            initializeVideoThumbnails();
         } else {
             // Fallback pre prehliadače, ktoré nepodporujú Intersection Observer
             const lazyImages = document.querySelectorAll('.lazy-image');
@@ -880,12 +978,103 @@ $cacheBusting = time();
                 lazyImage.parentElement.classList.add('loaded-container');
             });
             
-            // Fallback pre náhľady videí
-            initializeVideoThumbnails();
-            
             console.log('Lazy loading nie je podporovaný, načítavanie ' + lazyImages.length + ' obrázkov štandardným spôsobom');
         }
     }
+
+    /**
+     * Inicializácia náhľadov videí - globálna verzia funkcie
+     */
+    function initializeVideoThumbnails() {
+        const videoItems = document.querySelectorAll('.gallery-item[data-type="video"]');
+        
+        console.log('Inicializujem náhľady videí pre ' + videoItems.length + ' videí');
+        
+        videoItems.forEach(item => {
+            const videoElement = item.querySelector('video.video-preview');
+            const canvasElement = item.querySelector('canvas.video-thumbnail-canvas');
+            const videoPlaceholder = item.querySelector('.video-placeholder');
+            
+            if (!videoElement || !canvasElement) return;
+            
+            // Po načítaní metadát vykresliť prvý frame do canvas
+            videoElement.addEventListener('loadedmetadata', function() {
+                // Nastaviť čas na 0.5 sekundy pre získanie prvého zaujímavého frame-u
+                videoElement.currentTime = 0.5;
+            });
+            
+            // Po aktualizácii času vykresliť frame
+            videoElement.addEventListener('timeupdate', function() {
+                // Vykresliť frame na canvas
+                const ctx = canvasElement.getContext('2d');
+                
+                // Zachovať pomer strán
+                const width = canvasElement.width;
+                const height = canvasElement.height;
+                const videoWidth = videoElement.videoWidth;
+                const videoHeight = videoElement.videoHeight;
+                
+                let drawWidth, drawHeight, x, y;
+                
+                // Výpočet správnych rozmerov pre zachovanie pomeru strán
+                if (videoWidth / videoHeight > width / height) {
+                    // Video je širšie ako canvas - prispôsobiť výšku
+                    drawWidth = width;
+                    drawHeight = (videoHeight / videoWidth) * width;
+                    x = 0;
+                    y = (height - drawHeight) / 2;
+                } else {
+                    // Video je vyššie ako canvas - prispôsobiť šírku
+                    drawHeight = height;
+                    drawWidth = (videoWidth / videoHeight) * height;
+                    x = (width - drawWidth) / 2;
+                    y = 0;
+                }
+                
+                // Vyplniť pozadie
+                ctx.fillStyle = '#000000';
+                ctx.fillRect(0, 0, width, height);
+                
+                // Vykresliť frame
+                try {
+                    ctx.drawImage(videoElement, x, y, drawWidth, drawHeight);
+                    
+                    // Skryť placeholder po úspešnom vykreslení
+                    if (videoPlaceholder) {
+                        videoPlaceholder.style.display = 'none';
+                    }
+                } catch (e) {
+                    console.error('Chyba pri vykreslení náhľadu videa:', e);
+                }
+                
+                // Zastaviť sledovanie, jednorazové vykreslenie stačí
+                videoElement.removeEventListener('timeupdate', arguments.callee);
+            });
+            
+            // Začiatok načítavania videa
+            videoElement.load();
+        });
+    }
+
+    // Po načítaní dokumentu inicializovať všetky funkcie
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializovať vlastnú galériu
+        initializeCustomGallery();
+        
+        // Inicializovať formulár pre nahrávanie
+        initializeUploadForm();
+        
+        // Inicializovať lazy loading obrázkov
+        initializeLazyLoading();
+        
+        // Inicializovať náhľady videí
+        initializeVideoThumbnails();
+        
+        // Inicializovať "Zobraziť ďalšie" funkcionalitu
+        initializeLoadMore();
+        
+        console.log('Aplikácia bola načítaná');
+    });
     </script>
 </body>
 </html>

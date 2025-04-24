@@ -6,16 +6,23 @@ error_reporting(E_ALL);
 
 // Nastavenie limitov pre veľké súbory
 ini_set('upload_max_filesize', '300M');
-ini_set('post_max_size', '300M');
+ini_set('post_max_size', '350M'); // Nastavené o niečo vyššie než upload_max_filesize
 ini_set('memory_limit', '512M');
-ini_set('max_execution_time', 300); // 5 minút
-ini_set('max_input_time', 300); // 5 minút
+ini_set('max_execution_time', 600); // Zvýšené na 10 minút
+ini_set('max_input_time', 600); // Zvýšené na 10 minút
+
+// Zapnutie logovania PHP chýb pre debug
+ini_set('log_errors', 1);
+ini_set('error_log', 'php_errors.log');
 
 // Ladenie - uložíme si všetky informácie o požiadavke
 file_put_contents('upload_debug.log', "===== UPLOAD REQUEST =====" . PHP_EOL . 
                   "Time: " . date('Y-m-d H:i:s') . PHP_EOL .
                   "REQUEST: " . print_r($_REQUEST, true) . PHP_EOL . 
-                  "FILES: " . print_r($_FILES, true) . PHP_EOL);
+                  "FILES: " . print_r($_FILES, true) . PHP_EOL .
+                  "PHP INFO: max_execution_time=" . ini_get('max_execution_time') . 
+                  ", upload_max_filesize=" . ini_get('upload_max_filesize') . 
+                  ", post_max_size=" . ini_get('post_max_size') . PHP_EOL);
 
 // Kontrola metódy požiadavky
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
