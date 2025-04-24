@@ -829,23 +829,38 @@ $cacheBusting = time();
         // Pridať podporu pre dotykové gestá (swipe)
         let touchStartX = 0;
         let touchEndX = 0;
+        let touchStartY = 0;
+        let touchEndY = 0;
         
-        mediaContainer.addEventListener('touchstart', function(e) {
+        // Sledovať dotykové gestá pre celý modal, nielen pre kontajner médií
+        modal.addEventListener('touchstart', function(e) {
             touchStartX = e.changedTouches[0].screenX;
-        }, false);
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
         
-        mediaContainer.addEventListener('touchend', function(e) {
+        modal.addEventListener('touchend', function(e) {
             touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
             handleSwipe();
-        }, false);
+        }, { passive: true });
         
         function handleSwipe() {
-            const swipeThreshold = 50;
-            if (touchEndX < touchStartX - swipeThreshold) {
+            const swipeThreshold = 30; // Znížený prah pre citlivejšie gestá
+            const verticalThreshold = 75; // Prah pre vertikálny pohyb
+            
+            // Vypočítať horizontálny a vertikálny rozdiel
+            const horizontalDiff = touchEndX - touchStartX;
+            const verticalDiff = Math.abs(touchEndY - touchStartY);
+            
+            // Ak je vertikálny pohyb väčší ako prah, nerobiť nič (pravdepodobne scrollovanie)
+            if (verticalDiff > verticalThreshold) {
+                return;
+            }
+            
+            if (horizontalDiff < -swipeThreshold) {
                 // Swipe doľava - ďalšia položka
                 navigateGallery(1);
-            }
-            if (touchEndX > touchStartX + swipeThreshold) {
+            } else if (horizontalDiff > swipeThreshold) {
                 // Swipe doprava - predchádzajúca položka
                 navigateGallery(-1);
             }
