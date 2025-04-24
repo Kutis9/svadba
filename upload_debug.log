@@ -1,9 +1,9 @@
 ===== UPLOAD REQUEST =====
-Time: 2025-04-14 13:39:40
+Time: 2025-04-24 23:17:21
 REQUEST: Array
 (
     [message] => 
-    [author] => 
+    [author] => kutis
 )
 
 FILES: Array
@@ -12,34 +12,102 @@ FILES: Array
         (
             [name] => Array
                 (
-                    [0] => Designer.jpeg
-                    [1] => Designer-removebg-preview.png
-                    [2] => Formular.png
-                    [3] => pozadieSvadba.png
+                    [0] => IMG_1936.jpeg
+                    [1] => IMG_1935.jpeg
+                    [2] => IMG_1932.jpeg
+                    [3] => IMG_1929.jpeg
+                    [4] => 4B489E1F-F235-47E0-9292-0BBDDF421CDD.jpeg
+                    [5] => IMG_1906.jpeg
+                    [6] => B4EA48DB-9481-48E8-93A8-AAA4F43AE9CA.jpeg
+                    [7] => IMG_1891.jpeg
+                    [8] => IMG_1890.jpeg
+                    [9] => IMG_1889.jpeg
+                    [10] => IMG_1888.jpeg
+                    [11] => IMG_1887.jpeg
+                    [12] => IMG_2523.jpeg
+                    [13] => IMG_1820.jpeg
+                    [14] => IMG_1795.jpeg
+                    [15] => IMG_1794.jpeg
+                    [16] => IMG_1788.jpeg
+                    [17] => IMG_1792.mov
+                    [18] => IMG_1786.jpeg
+                    [19] => IMG_1778.jpeg
+                    [20] => IMG_1773.jpeg
                 )
 
             [full_path] => Array
                 (
-                    [0] => Designer.jpeg
-                    [1] => Designer-removebg-preview.png
-                    [2] => Formular.png
-                    [3] => pozadieSvadba.png
+                    [0] => IMG_1936.jpeg
+                    [1] => IMG_1935.jpeg
+                    [2] => IMG_1932.jpeg
+                    [3] => IMG_1929.jpeg
+                    [4] => 4B489E1F-F235-47E0-9292-0BBDDF421CDD.jpeg
+                    [5] => IMG_1906.jpeg
+                    [6] => B4EA48DB-9481-48E8-93A8-AAA4F43AE9CA.jpeg
+                    [7] => IMG_1891.jpeg
+                    [8] => IMG_1890.jpeg
+                    [9] => IMG_1889.jpeg
+                    [10] => IMG_1888.jpeg
+                    [11] => IMG_1887.jpeg
+                    [12] => IMG_2523.jpeg
+                    [13] => IMG_1820.jpeg
+                    [14] => IMG_1795.jpeg
+                    [15] => IMG_1794.jpeg
+                    [16] => IMG_1788.jpeg
+                    [17] => IMG_1792.mov
+                    [18] => IMG_1786.jpeg
+                    [19] => IMG_1778.jpeg
+                    [20] => IMG_1773.jpeg
                 )
 
             [type] => Array
                 (
                     [0] => image/jpeg
-                    [1] => image/png
-                    [2] => image/png
-                    [3] => image/png
+                    [1] => image/jpeg
+                    [2] => image/jpeg
+                    [3] => image/jpeg
+                    [4] => image/jpeg
+                    [5] => image/jpeg
+                    [6] => image/jpeg
+                    [7] => image/jpeg
+                    [8] => image/jpeg
+                    [9] => image/jpeg
+                    [10] => image/jpeg
+                    [11] => image/jpeg
+                    [12] => image/jpeg
+                    [13] => image/jpeg
+                    [14] => image/jpeg
+                    [15] => image/jpeg
+                    [16] => image/jpeg
+                    [17] => video/quicktime
+                    [18] => image/jpeg
+                    [19] => image/jpeg
+                    [20] => image/jpeg
                 )
 
             [tmp_name] => Array
                 (
-                    [0] => C:\xampp\tmp\php5006.tmp
-                    [1] => C:\xampp\tmp\php5007.tmp
-                    [2] => C:\xampp\tmp\php5008.tmp
-                    [3] => C:\xampp\tmp\php5019.tmp
+                    [0] => /tmp/php1pgis8064v3a1qFhRUr
+                    [1] => /tmp/phped10jift99bu898DJA6
+                    [2] => /tmp/php6i5rs7bdga0s4TTs9HI
+                    [3] => /tmp/phpjoviber37voh6Qlr76R
+                    [4] => /tmp/php2b6649q9d51q3GH55By
+                    [5] => /tmp/phpufkhg8jtift1d4BFy4A
+                    [6] => /tmp/phpbf18ikl32m879vfTdcb
+                    [7] => /tmp/phpr610rvvclml6d6wZPbc
+                    [8] => /tmp/phpugt5f14d5d3iabmrTSf
+                    [9] => /tmp/phpc4o5v295vj7bbem1u1L
+                    [10] => /tmp/php0fn5puk7s4qg8GA8Gvh
+                    [11] => /tmp/php2nhjr3e0o7cj9WlDElI
+                    [12] => /tmp/phpl2hjsgkers2e5hHxbR5
+                    [13] => /tmp/phplidjqk2r0dgv8E6qRXK
+                    [14] => /tmp/phpcvpp5pjvrimcewdweGT
+                    [15] => /tmp/phpmormpq2vo4su4oLEkuN
+                    [16] => /tmp/phpmkvlp799oe0fasHjrAc
+                    [17] => /tmp/php42n48mvkldvdcvUIqBe
+                    [18] => /tmp/phprriep4ngo2fn5BEqpcy
+                    [19] => /tmp/php7ngntdoaogdfaycXyOj
+                    [20] => /tmp/php9814tfsecidd6RvEVvb
                 )
 
             [error] => Array
@@ -48,41 +116,165 @@ FILES: Array
                     [1] => 0
                     [2] => 0
                     [3] => 0
+                    [4] => 0
+                    [5] => 0
+                    [6] => 0
+                    [7] => 0
+                    [8] => 0
+                    [9] => 0
+                    [10] => 0
+                    [11] => 0
+                    [12] => 0
+                    [13] => 0
+                    [14] => 0
+                    [15] => 0
+                    [16] => 0
+                    [17] => 0
+                    [18] => 0
+                    [19] => 0
+                    [20] => 0
                 )
 
             [size] => Array
                 (
-                    [0] => 101188
-                    [1] => 147797
-                    [2] => 476811
-                    [3] => 1822970
+                    [0] => 718588
+                    [1] => 1375361
+                    [2] => 995722
+                    [3] => 1046221
+                    [4] => 1483814
+                    [5] => 1713775
+                    [6] => 1433010
+                    [7] => 2107085
+                    [8] => 1957063
+                    [9] => 2293593
+                    [10] => 2175851
+                    [11] => 4564851
+                    [12] => 5321418
+                    [13] => 4457707
+                    [14] => 1410569
+                    [15] => 1376860
+                    [16] => 5265932
+                    [17] => 34892451
+                    [18] => 5318425
+                    [19] => 1545914
+                    [20] => 3157256
                 )
 
         )
 
 )
 
-Processing file: Designer.jpeg, size: 101188, tmp: C:\xampp\tmp\php5006.tmp, error: 0
-Trying to move file to: uploads/svadba_67fcf3fcd0d121.45365744.jpeg
+PHP INFO: max_execution_time=600, upload_max_filesize=128M, post_max_size=128M
+Processing file: IMG_1936.jpeg, size: 718588, tmp: /tmp/php1pgis8064v3a1qFhRUr, error: 0
+Trying to move file to: uploads/svadba_680aaa61350f81.48669566.jpeg
 File moved successfully
-Processing file: Designer-removebg-preview.png, size: 147797, tmp: C:\xampp\tmp\php5007.tmp, error: 0
-Trying to move file to: uploads/svadba_67fcf3fcd13d06.89559187.png
+Metadata saved to: uploads/svadba_680aaa61350f81.48669566.txt
+Processing file: IMG_1935.jpeg, size: 1375361, tmp: /tmp/phped10jift99bu898DJA6, error: 0
+Trying to move file to: uploads/svadba_680aaa61393d51.63091345.jpeg
 File moved successfully
-Processing file: Formular.png, size: 476811, tmp: C:\xampp\tmp\php5008.tmp, error: 0
-Trying to move file to: uploads/svadba_67fcf3fcd1b066.41959197.png
+Metadata saved to: uploads/svadba_680aaa61393d51.63091345.txt
+Processing file: IMG_1932.jpeg, size: 995722, tmp: /tmp/php6i5rs7bdga0s4TTs9HI, error: 0
+Trying to move file to: uploads/svadba_680aaa613f80b1.27336802.jpeg
 File moved successfully
-Processing file: pozadieSvadba.png, size: 1822970, tmp: C:\xampp\tmp\php5019.tmp, error: 0
-Trying to move file to: uploads/svadba_67fcf3fcd224c7.93594459.png
+Metadata saved to: uploads/svadba_680aaa613f80b1.27336802.txt
+Processing file: IMG_1929.jpeg, size: 1046221, tmp: /tmp/phpjoviber37voh6Qlr76R, error: 0
+Trying to move file to: uploads/svadba_680aaa6143b842.38739603.jpeg
 File moved successfully
+Metadata saved to: uploads/svadba_680aaa6143b842.38739603.txt
+Processing file: 4B489E1F-F235-47E0-9292-0BBDDF421CDD.jpeg, size: 1483814, tmp: /tmp/php2b6649q9d51q3GH55By, error: 0
+Trying to move file to: uploads/svadba_680aaa61480311.86905410.jpeg
+File moved successfully
+Metadata saved to: uploads/svadba_680aaa61480311.86905410.txt
+Processing file: IMG_1906.jpeg, size: 1713775, tmp: /tmp/phpufkhg8jtift1d4BFy4A, error: 0
+Trying to move file to: uploads/svadba_680aaa614d4ef4.33286891.jpeg
+File moved successfully
+Metadata saved to: uploads/svadba_680aaa614d4ef4.33286891.txt
+Processing file: B4EA48DB-9481-48E8-93A8-AAA4F43AE9CA.jpeg, size: 1433010, tmp: /tmp/phpbf18ikl32m879vfTdcb, error: 0
+Trying to move file to: uploads/svadba_680aaa61533bd3.40488802.jpeg
+File moved successfully
+Metadata saved to: uploads/svadba_680aaa61533bd3.40488802.txt
+Processing file: IMG_1891.jpeg, size: 2107085, tmp: /tmp/phpr610rvvclml6d6wZPbc, error: 0
+Trying to move file to: uploads/svadba_680aaa6158cd00.64051319.jpeg
+File moved successfully
+Metadata saved to: uploads/svadba_680aaa6158cd00.64051319.txt
+Processing file: IMG_1890.jpeg, size: 1957063, tmp: /tmp/phpugt5f14d5d3iabmrTSf, error: 0
+Trying to move file to: uploads/svadba_680aaa615ff412.34826776.jpeg
+File moved successfully
+Metadata saved to: uploads/svadba_680aaa615ff412.34826776.txt
+Processing file: IMG_1889.jpeg, size: 2293593, tmp: /tmp/phpc4o5v295vj7bbem1u1L, error: 0
+Trying to move file to: uploads/svadba_680aaa6166e767.64997215.jpeg
+File moved successfully
+Metadata saved to: uploads/svadba_680aaa6166e767.64997215.txt
+Processing file: IMG_1888.jpeg, size: 2175851, tmp: /tmp/php0fn5puk7s4qg8GA8Gvh, error: 0
+Trying to move file to: uploads/svadba_680aaa616e8c97.67142439.jpeg
+File moved successfully
+Metadata saved to: uploads/svadba_680aaa616e8c97.67142439.txt
+Processing file: IMG_1887.jpeg, size: 4564851, tmp: /tmp/php2nhjr3e0o7cj9WlDElI, error: 0
+Trying to move file to: uploads/svadba_680aaa6175ac08.12021020.jpeg
+File moved successfully
+Metadata saved to: uploads/svadba_680aaa6175ac08.12021020.txt
+Processing file: IMG_2523.jpeg, size: 5321418, tmp: /tmp/phpl2hjsgkers2e5hHxbR5, error: 0
+Trying to move file to: uploads/svadba_680aaa618312d7.04879355.jpeg
+File moved successfully
+Metadata saved to: uploads/svadba_680aaa618312d7.04879355.txt
+Processing file: IMG_1820.jpeg, size: 4457707, tmp: /tmp/phplidjqk2r0dgv8E6qRXK, error: 0
+Trying to move file to: uploads/svadba_680aaa619250a5.34724286.jpeg
+File moved successfully
+Metadata saved to: uploads/svadba_680aaa619250a5.34724286.txt
+Processing file: IMG_1795.jpeg, size: 1410569, tmp: /tmp/phpcvpp5pjvrimcewdweGT, error: 0
+Trying to move file to: uploads/svadba_680aaa619f8595.80171387.jpeg
+File moved successfully
+Metadata saved to: uploads/svadba_680aaa619f8595.80171387.txt
+Processing file: IMG_1794.jpeg, size: 1376860, tmp: /tmp/phpmormpq2vo4su4oLEkuN, error: 0
+Trying to move file to: uploads/svadba_680aaa61a4cd35.83978512.jpeg
+File moved successfully
+Metadata saved to: uploads/svadba_680aaa61a4cd35.83978512.txt
+Processing file: IMG_1788.jpeg, size: 5265932, tmp: /tmp/phpmkvlp799oe0fasHjrAc, error: 0
+Trying to move file to: uploads/svadba_680aaa61a9e990.91319695.jpeg
+File moved successfully
+Metadata saved to: uploads/svadba_680aaa61a9e990.91319695.txt
+Processing file: IMG_1792.mov, size: 34892451, tmp: /tmp/php42n48mvkldvdcvUIqBe, error: 0
+Trying to move file to: uploads/svadba_680aaa61b92992.49987393.mov
+File moved successfully
+Metadata saved to: uploads/svadba_680aaa61b92992.49987393.txt
+Processing file: IMG_1786.jpeg, size: 5318425, tmp: /tmp/phprriep4ngo2fn5BEqpcy, error: 0
+Trying to move file to: uploads/svadba_680aaa621bbd90.06886638.jpeg
+File moved successfully
+Metadata saved to: uploads/svadba_680aaa621bbd90.06886638.txt
+Processing file: IMG_1778.jpeg, size: 1545914, tmp: /tmp/php7ngntdoaogdfaycXyOj, error: 0
+Trying to move file to: uploads/svadba_680aaa622c8ed8.30671011.jpeg
+File moved successfully
+Metadata saved to: uploads/svadba_680aaa622c8ed8.30671011.txt
+Processing file: IMG_1773.jpeg, size: 3157256, tmp: /tmp/php9814tfsecidd6RvEVvb, error: 0
+Trying to move file to: uploads/svadba_680aaa62325515.45048500.jpeg
+File moved successfully
+Metadata saved to: uploads/svadba_680aaa62325515.45048500.txt
 Errors: Array
 (
 )
 
 Uploaded files: Array
 (
-    [0] => uploads/svadba_67fcf3fcd0d121.45365744.jpeg
-    [1] => uploads/svadba_67fcf3fcd13d06.89559187.png
-    [2] => uploads/svadba_67fcf3fcd1b066.41959197.png
-    [3] => uploads/svadba_67fcf3fcd224c7.93594459.png
+    [0] => uploads/svadba_680aaa61350f81.48669566.jpeg
+    [1] => uploads/svadba_680aaa61393d51.63091345.jpeg
+    [2] => uploads/svadba_680aaa613f80b1.27336802.jpeg
+    [3] => uploads/svadba_680aaa6143b842.38739603.jpeg
+    [4] => uploads/svadba_680aaa61480311.86905410.jpeg
+    [5] => uploads/svadba_680aaa614d4ef4.33286891.jpeg
+    [6] => uploads/svadba_680aaa61533bd3.40488802.jpeg
+    [7] => uploads/svadba_680aaa6158cd00.64051319.jpeg
+    [8] => uploads/svadba_680aaa615ff412.34826776.jpeg
+    [9] => uploads/svadba_680aaa6166e767.64997215.jpeg
+    [10] => uploads/svadba_680aaa616e8c97.67142439.jpeg
+    [11] => uploads/svadba_680aaa6175ac08.12021020.jpeg
+    [12] => uploads/svadba_680aaa618312d7.04879355.jpeg
+    [13] => uploads/svadba_680aaa619250a5.34724286.jpeg
+    [14] => uploads/svadba_680aaa619f8595.80171387.jpeg
+    [15] => uploads/svadba_680aaa61a4cd35.83978512.jpeg
+    [16] => uploads/svadba_680aaa61a9e990.91319695.jpeg
+    [17] => uploads/svadba_680aaa61b92992.49987393.mov
+    [18] => uploads/svadba_680aaa621bbd90.06886638.jpeg
+    [19] => uploads/svadba_680aaa622c8ed8.30671011.jpeg
+    [20] => uploads/svadba_680aaa62325515.45048500.jpeg
 )
 
