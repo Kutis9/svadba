@@ -147,6 +147,9 @@ $cacheBusting = time();
     <div class="upload-spinner-container">
         <div class="upload-spinner"></div>
         <div class="upload-progress-text">Nahrávanie súborov... Prosím, počkajte.</div>
+        <div class="upload-progress-container">
+            <div class="upload-progress-bar"></div>
+        </div>
     </div>
     
     <!-- Modal galéria -->
@@ -438,8 +441,16 @@ $cacheBusting = time();
                     if (e.lengthComputable) {
                         const percentComplete = Math.round((e.loaded / e.total) * 100);
                         const progressText = document.querySelector('.upload-progress-text');
+                        const progressBar = document.querySelector('.upload-progress-bar');
+                        
+                        // Aktualizácia textu s percentami
                         if (progressText) {
                             progressText.textContent = `Nahrávanie súborov: ${percentComplete}% (${formatFileSize(e.loaded)} / ${formatFileSize(e.total)})`;
+                        }
+                        
+                        // Aktualizácia progress baru
+                        if (progressBar) {
+                            progressBar.style.width = percentComplete + '%';
                         }
                     }
                 });
@@ -545,8 +556,21 @@ $cacheBusting = time();
      */
     function showUploadSpinner() {
         const spinnerContainer = document.querySelector('.upload-spinner-container');
+        const progressBar = document.querySelector('.upload-progress-bar');
+        const progressText = document.querySelector('.upload-progress-text');
+        
         if (spinnerContainer) {
             spinnerContainer.style.display = 'flex';
+        }
+        
+        // Reset progress bar
+        if (progressBar) {
+            progressBar.style.width = '0%';
+        }
+        
+        // Reset progress text
+        if (progressText) {
+            progressText.textContent = 'Nahrávanie súborov... Prosím, počkajte.';
         }
     }
     
@@ -1063,6 +1087,9 @@ $cacheBusting = time();
         
         // Inicializovať formulár pre nahrávanie
         initializeUploadForm();
+        
+        // Inicializovať spracovanie súborov pre nahrávanie
+        initializeFileInput();
         
         // Inicializovať lazy loading obrázkov
         initializeLazyLoading();
