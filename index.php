@@ -883,6 +883,8 @@ $cacheBusting = time();
      * Aktualizácia dát v galérii po načítaní nových položiek
      */
     function updateCustomGallery() {
+        console.log('Aktualizácia galérie pre nové položky');
+        
         const galleryItems = document.querySelectorAll('.gallery-item');
         const modal = document.getElementById('custom-gallery-modal');
         
@@ -906,6 +908,24 @@ $cacheBusting = time();
             // Odstrániť existujúce listenery, aby nedochádzalo k duplikácii
             const newItem = item.cloneNode(true);
             item.parentNode.replaceChild(newItem, item);
+            
+            // Manuálne načítať obrázok z data-src pre novo pridané položky
+            const lazyImage = newItem.querySelector('img.lazy-image');
+            if (lazyImage && lazyImage.dataset.src) {
+                // Vytvoriť nový Image element pre načítanie obrázka
+                const tempImg = new Image();
+                tempImg.onload = function() {
+                    lazyImage.src = lazyImage.dataset.src;
+                    lazyImage.classList.remove('lazy-image');
+                    lazyImage.classList.add('loaded');
+                    lazyImage.removeAttribute('data-src');
+                    
+                    if (lazyImage.parentElement) {
+                        lazyImage.parentElement.classList.add('loaded-container');
+                    }
+                };
+                tempImg.src = lazyImage.dataset.src;
+            }
             
             newItem.addEventListener('click', function() {
                 const index = parseInt(this.getAttribute('data-index'));
@@ -1010,49 +1030,79 @@ $cacheBusting = time();
      * Inicializácia lazy loading pre obrázky v galérii
      */
     function initializeLazyLoading() {
+        console.log('Spúšťa sa lazy loading pre obrázky');
+        
         // Kontrola, či prehliadač podporuje Intersection Observer API
         if ('IntersectionObserver' in window) {
             const lazyImageObserver = new IntersectionObserver(function(entries, observer) {
                 entries.forEach(function(entry) {
                     if (entry.isIntersecting) {
                         const lazyImage = entry.target;
-                        // Nahradenie zástupného obrazca skutočným obrázkom
-                        lazyImage.src = lazyImage.dataset.src;
+                        console.log('Načítava sa obrázok:', lazyImage.dataset.src);
                         
-                        // Po načítaní obrázka odstrániť lazy-image classu a pridať loaded classu
-                        lazyImage.onload = function() {
-                            lazyImage.classList.remove('lazy-image');
-                            lazyImage.classList.add('loaded');
-                            lazyImage.parentElement.classList.add('loaded-container');
-                        };
+                        // Nahradenie zástupného obrazca skutočným obrázkom
+                        if (lazyImage.dataset.src) {
+                            lazyImage.src = lazyImage.dataset.src;
+                            
+                            // Po načítaní obrázka odstrániť lazy-image classu a pridať loaded classu
+                            lazyImage.onload = function() {
+                                console.log('Obrázok načítaný:', lazyImage.src);
+                                lazyImage.classList.remove('lazy-image');
+                                lazyImage.classList.add('loaded');
+                                if (lazyImage.parentElement) {
+                                    lazyImage.parentElement.classList.add('loaded-container');
+                                }
+                            };
+                            
+                            // Pre prípad, že obrázok bol medzičasom načítaný z cache
+                            if (lazyImage.complete) {
+                                console.log('Obrázok už načítaný (z cache):', lazyImage.src);
+                                lazyImage.classList.remove('lazy-image');
+                                lazyImage.classList.add('loaded');
+                                if (lazyImage.parentElement) {
+                                    lazyImage.parentElement.classList.add('loaded-container');
+                                }
+                            }
+                            
+                            // Odstrániť atribút data-src, aby sme zabránili opakovanému načítaniu
+                            lazyImage.removeAttribute('data-src');
+                        }
                         
                         // Prestať sledovať tento obrázok
                         observer.unobserve(lazyImage);
                     }
                 });
             }, {
-                rootMargin: '100px 0px', // Načítať obrázky 100px pred tým, ako sa zobrazia
+                rootMargin: '200px 0px', // Zvýšené na 200px pre skoršie načítavanie
                 threshold: 0.01 // Spustiť načítanie, keď je viditeľný 1% obrázka
             });
             
             // Sledovať všetky obrázky s lazy-image triedou
-            const lazyImages = document.querySelectorAll('.lazy-image');
+            const lazyImages = document.querySelectorAll('img.lazy-image');
+            console.log('Nájdených lazy-image obrázkov:', lazyImages.length);
+            
             lazyImages.forEach(function(lazyImage) {
                 lazyImageObserver.observe(lazyImage);
             });
-            
-            console.log('Lazy loading inicializovaný pre ' + lazyImages.length + ' obrázkov');
         } else {
             // Fallback pre prehliadače, ktoré nepodporujú Intersection Observer
-            const lazyImages = document.querySelectorAll('.lazy-image');
-            lazyImages.forEach(function(lazyImage) {
-                lazyImage.src = lazyImage.dataset.src;
-                lazyImage.classList.remove('lazy-image');
-                lazyImage.classList.add('loaded');
-                lazyImage.parentElement.classList.add('loaded-container');
-            });
+            console.log('Intersection Observer nie je podporovaný, používa sa fallback');
             
-            console.log('Lazy loading nie je podporovaný, načítavanie ' + lazyImages.length + ' obrázkov štandardným spôsobom');
+            const lazyImages = document.querySelectorAll('img.lazy-image');
+            console.log('Fallback: Nájdených lazy-image obrázkov:', lazyImages.length);
+            
+            lazyImages.forEach(function(lazyImage) {
+                if (lazyImage.dataset.src) {
+                    lazyImage.src = lazyImage.dataset.src;
+                    lazyImage.removeAttribute('data-src');
+                    lazyImage.classList.remove('lazy-image');
+                    lazyImage.classList.add('loaded');
+                    
+                    if (lazyImage.parentElement) {
+                        lazyImage.parentElement.classList.add('loaded-container');
+                    }
+                }
+            });
         }
     }
 
