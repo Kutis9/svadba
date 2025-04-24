@@ -610,13 +610,13 @@ $cacheBusting = time();
         const counter = document.querySelector('.gallery-counter');
         const dateDisplay = document.querySelector('.gallery-date');
         
-        // Stav galérie
-        let currentIndex = 0;
-        let galleryData = [];
+        // Stav galérie - uložiť do globálnej premennej pre prístup z iných funkcií
+        window.currentGalleryIndex = 0;
+        window.customGalleryData = [];
         
         // Naplniť galleryData z HTML elementov
         galleryItems.forEach(item => {
-            galleryData.push({
+            window.customGalleryData.push({
                 type: item.getAttribute('data-type'),
                 path: item.getAttribute('data-path'),
                 date: item.getAttribute('data-date'),
@@ -676,9 +676,9 @@ $cacheBusting = time();
          * Otvorenie galérie na určitom indexe
          */
         function openGallery(index) {
-            if (index >= 0 && index < galleryData.length) {
-                currentIndex = index;
-                loadMedia(galleryData[currentIndex]);
+            if (index >= 0 && index < window.customGalleryData.length) {
+                window.currentGalleryIndex = index;
+                loadMedia(window.customGalleryData[window.currentGalleryIndex]);
                 updateControls();
                 
                 modal.classList.add('open');
@@ -688,6 +688,9 @@ $cacheBusting = time();
                 adjustMobileHeight();
             }
         }
+        
+        // Sprístupnenie openGallery globálne pre volanie z updateCustomGallery
+        window.openCustomGallery = openGallery;
         
         /**
          * Zatvorenie galérie
@@ -710,17 +713,17 @@ $cacheBusting = time();
          * Navigácia v galérii
          */
         function navigateGallery(step) {
-            const newIndex = currentIndex + step;
+            const newIndex = window.currentGalleryIndex + step;
             
-            if (newIndex >= 0 && newIndex < galleryData.length) {
+            if (newIndex >= 0 && newIndex < window.customGalleryData.length) {
                 // Zastaviť video, ak sa prehráva
                 const video = mediaContainer.querySelector('video');
                 if (video) {
                     video.pause();
                 }
                 
-                currentIndex = newIndex;
-                loadMedia(galleryData[currentIndex]);
+                window.currentGalleryIndex = newIndex;
+                loadMedia(window.customGalleryData[window.currentGalleryIndex]);
                 updateControls();
             }
         }
@@ -804,12 +807,12 @@ $cacheBusting = time();
          * Aktualizácia ovládacích prvkov galérie
          */
         function updateControls() {
-            counter.textContent = `${currentIndex + 1} / ${galleryData.length}`;
-            dateDisplay.textContent = galleryData[currentIndex].date;
+            counter.textContent = `${window.currentGalleryIndex + 1} / ${window.customGalleryData.length}`;
+            dateDisplay.textContent = window.customGalleryData[window.currentGalleryIndex].date;
             
             // Zobrazenie/skrytie navigačných tlačidiel
-            prevBtn.style.visibility = currentIndex > 0 ? 'visible' : 'hidden';
-            nextBtn.style.visibility = currentIndex < galleryData.length - 1 ? 'visible' : 'hidden';
+            prevBtn.style.visibility = window.currentGalleryIndex > 0 ? 'visible' : 'hidden';
+            nextBtn.style.visibility = window.currentGalleryIndex < window.customGalleryData.length - 1 ? 'visible' : 'hidden';
         }
         
         /**
@@ -877,7 +880,44 @@ $cacheBusting = time();
     }
     
     /**
-     * Inicializácia funkcionalita "Zobraziť ďalšie"
+     * Aktualizácia dát v galérii po načítaní nových položiek
+     */
+    function updateCustomGallery() {
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        const modal = document.getElementById('custom-gallery-modal');
+        
+        if (!modal || !window.customGalleryData) return;
+        
+        // Resetovať galériu
+        window.customGalleryData = [];
+        
+        // Naplniť galleryData z HTML elementov - vrátane nových
+        galleryItems.forEach(item => {
+            window.customGalleryData.push({
+                type: item.getAttribute('data-type'),
+                path: item.getAttribute('data-path'),
+                date: item.getAttribute('data-date'),
+                index: parseInt(item.getAttribute('data-index'))
+            });
+        });
+        
+        // Pridať event listener pre každú položku v galérií (vrátane novo načítaných)
+        galleryItems.forEach(item => {
+            // Odstrániť existujúce listenery, aby nedochádzalo k duplikácii
+            const newItem = item.cloneNode(true);
+            item.parentNode.replaceChild(newItem, item);
+            
+            newItem.addEventListener('click', function() {
+                const index = parseInt(this.getAttribute('data-index'));
+                if (typeof window.openCustomGallery === 'function') {
+                    window.openCustomGallery(index);
+                }
+            });
+        });
+    }
+    
+    /**
+     * Inicializácia funkcionality "Zobraziť ďalšie"
      */
     function initializeLoadMore() {
         const loadMoreBtn = document.getElementById('load-more-btn');
@@ -921,13 +961,8 @@ $cacheBusting = time();
                                 // Inicializovať náhľady videí pre nové položky
                                 initializeVideoThumbnails();
                                 
-                                // Aktualizovať galériu pomocou funkcie z main.js
-                                if (typeof window.updateGalleryItems === 'function') {
-                                    window.updateGalleryItems();
-                                } else {
-                                    // Fallback ak funkcia nie je dostupná
-                                    updateCustomGallery();
-                                }
+                                // Aktualizovať galériu - KĽÚČOVÁ ZMENA PRE ZOBRAZENIE NOVÝCH FOTIEK V GALÉRIÍ
+                                updateCustomGallery();
                                 
                                 console.log(`Načítaných ${response.count} nových položiek, celkovo ${response.totalLoaded}/${response.totalFiles}`);
                                 
